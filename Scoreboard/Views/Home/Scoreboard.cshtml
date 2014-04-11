@@ -108,7 +108,7 @@
         };
 
         $scope.brianO = {
-            'name': "Brian O'Conner",
+            'name': "Brian O'Connor",
             'score': 0,
             'expanded': true,
             'picks': [
@@ -158,16 +158,37 @@
             for (var i = 0; i < $scope.shenanigans.length; i++) {
                 var currentPerson = $scope.shenanigans[i];
                 currentPerson.score = 0;
+                currentPerson.base = 0;
                 for (var j = 0; j < currentPerson.picks.length; j++) {
                     var currentPlayer = currentPerson.picks[j];
                     var info = $scope.matchPlayerInfo(currentPlayer.id, currentPerson.name);
                     currentPlayer.name = info.fName + ' ' + info.lName;
                     currentPlayer.score = info.score;
+                    currentPlayer.today = info.today;
                     currentPlayer.thru = info.thru;
                     currentPlayer.sortKey = $scope.getScoreNumber(info.score);
+                    var todayString = 'E';
+                    if (currentPlayer.today == 'E' || currentPlayer.today.substring(0, 1) == '+' || currentPlayer.today.substring(0, 1) == '-') {
+                        todayString = currentPlayer.today;
+                    }
+                    currentPlayer.todayKey = $scope.getScoreNumber(todayString);
                     currentPerson.score += $scope.getScoreNumber(info.score);
+                    currentPerson.base += (currentPlayer.sortKey - currentPlayer.todayKey);
                 }
             }
+        };
+
+        $scope.getDelta = function(person){
+            var delta = person.score - person.base;
+            var value = "";
+            if (delta > 0)
+                value = "+" + delta;
+            else if (delta == 0)
+                value = "E";
+            else
+                value = delta;
+
+            return value;
         };
 
         $scope.getScoreNumber = function (scoreString) {
@@ -189,7 +210,7 @@
                 }
             }
 
-            return { name: '', score: '', thru: '' };
+            return { name: '', score: '', thru: '', today: '' };
         };
 
         $scope.loadData = function(){
@@ -245,9 +266,16 @@
     <br/>
     <ul ng-hide="showPlayerRankings">
         <li ng-repeat="person in shenanigans | orderBy:personPredicate:personReverse" style="list-style:none">
-            <strong ng-click="person.expanded = !person.expanded"><span class="col-md-2">{{person.name}}</span>{{person.score}}</strong>
+            <strong ng-click="person.expanded = !person.expanded"><span class="col-md-2">{{person.name}}</span><span class="col-md-2">{{person.score}}</span>({{getDelta(person)}} today)</strong>
             <table ng-show="person.expanded">
-                <tr ng-repeat="pick in person.picks | orderBy:pickPredicate:pickReverse"><td class="col-md-1"></td><td>{{pick.name}}  ({{pick.tier}})</td><td>{{pick.score}} thru {{pick.thru}}</td></tr>
+                <tr><td class="col-md-1"></td><td class="col-md-5">Player</td><td class="col-md-2">Score</td><td class="col-md-2">Today</td><td class="col-md-2">Thru</td></tr>
+                <tr ng-repeat="pick in person.picks | orderBy:pickPredicate:pickReverse">
+                    <td class="col-md-1"></td>
+                    <td class="col-md-5">{{pick.name}}  ({{pick.tier}})</td>
+                    <td class="col-md-2">{{pick.score}}</td>
+                    <td class="col-md-2">{{pick.today}}</td>
+                    <td class="col-md-2">{{pick.thru}}</td>
+                </tr>
             </table>
         </li>
     </ul>
