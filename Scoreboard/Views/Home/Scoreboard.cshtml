@@ -1,6 +1,34 @@
 ﻿@{
     ViewBag.Title = "Scoreboard";
 }
+<style>
+   .clickable {
+       cursor:pointer;
+        font-weight: bold;
+       color: darkblue;
+   }
+
+   .clickable:hover{
+       color: orange;
+   }
+
+   .clickable:active{
+       color:darkorange;
+   }
+
+   .scoreIncrease{
+       color: green;
+   }
+
+   .scoreDecrease{
+       color: red;
+   }
+
+   .scoreHold {
+       color:black;
+   }
+
+</style>
 <script>
     var base_url = '/Scoreboard';
     if (window.location.hostname == 'localhost')
@@ -8,15 +36,17 @@
 
     angular.module('scoreboardApp', []).controller('ScoreboardCtrl', function ($scope, $http) {
         $scope.showPlayerRankings = false;
-        $scope.refresh = 0;
+        $scope.refresh = 30;
         $scope.personPredicate = 'score';
         $scope.personReverse = false;
-        $scope.pickPredicate = 'sortKey';
+        $scope.pickPredicate = 'scoreKey';
         $scope.pickReverse = false;
         $scope.playerPredicate = 'scoreKey';
         $scope.playerReverse = false;
 
         $scope.scores = {};
+        $scope.scoreCache = {};
+
         $scope.jeremyL = {
             'name': 'Jeremy Lizza',
             'score': 0,
@@ -153,6 +183,10 @@
                 $scope.scores.player[i].pickedBy = "";
                 $scope.scores.player[i].scoreKey = $scope.getScoreNumber($scope.scores.player[i].score);
                 $scope.scores.player[i].todayKey = $scope.getScoreNumber($scope.scores.player[i].today);
+                if (typeof $scope.scoreCache[$scope.scores.player[i].id] == 'undefined')
+                    $scope.scores.player[i].status = 'scoreHold';
+                else
+                    $scope.scores.player[i].status = $scope.scoreCache[$scope.scores.player[i].id].status;
             }
 
             for (var i = 0; i < $scope.shenanigans.length; i++) {
@@ -166,14 +200,32 @@
                     currentPlayer.score = info.score;
                     currentPlayer.today = info.today;
                     currentPlayer.thru = info.thru;
-                    currentPlayer.sortKey = $scope.getScoreNumber(info.score);
+                    currentPlayer.status = info.status;
+                    currentPlayer.scoreKey = $scope.getScoreNumber(info.score);
                     var todayString = 'E';
                     if (currentPlayer.today == 'E' || currentPlayer.today.substring(0, 1) == '+' || currentPlayer.today.substring(0, 1) == '-') {
                         todayString = currentPlayer.today;
                     }
                     currentPlayer.todayKey = $scope.getScoreNumber(todayString);
                     currentPerson.score += $scope.getScoreNumber(info.score);
-                    currentPerson.base += (currentPlayer.sortKey - currentPlayer.todayKey);
+                    currentPerson.base += (currentPlayer.scoreKey - currentPlayer.todayKey);
+
+                    if (typeof $scope.scoreCache[info.id] == 'undefined') {
+                        $scope.scoreCache[info.id] = { 'thru': info.thru, 'score': info.scoreKey, 'status': 'scoreHold' };
+                    } else {
+                        var cache = $scope.scoreCache[info.id];
+                        if (info.thru != cache.thru) {
+                            if (info.scoreKey > cache.score) {
+                                cache.status = 'scoreIncrease';
+                            } else if (info.scoreKey < cache.score){
+                                cache.status = 'scoreDecrease';
+                            } else {
+                                cache.status = 'scoreHold';
+                            }
+                            cache.thru = info.thru;
+                            cache.score = info.scoreKey;
+                        }
+                    }
                 }
             }
         };
@@ -189,6 +241,11 @@
                 value = delta;
 
             return value;
+        };
+
+        $scope.setExpanded = function (value) {
+            for (var i = 0; i < $scope.shenanigans.length; i++)
+                $scope.shenanigans[i].expanded = value;
         };
 
         $scope.getScoreNumber = function (scoreString) {
@@ -210,7 +267,7 @@
                 }
             }
 
-            return { name: '', score: '', thru: '', today: '' };
+            return { name: '', score: '', thru: '', today: '', status: 'scoreHold' };
         };
 
         $scope.loadData = function(){
@@ -218,18 +275,22 @@
         };
 
         $scope.refreshingIn = function () {
-            if ($scope.refresh == 0)
+            if ($scope.refresh == 0) {
                 $scope.refresh = 30;
-            else
+                $scope.loadData();
+            } else
                 $scope.refresh = $scope.refresh - 1;
 
             $scope.$apply($scope.refresh);
         };
 
         $scope.setPlayerSort = function (sort) {
-            if (sort == $scope.playerPredicate)
+            if (sort == 'default') {
+                $scope.playerReverse = false;
+                $scope.playerPredicate = 'scoreKey';
+            } else if (sort == $scope.playerPredicate) {
                 $scope.playerReverse = !$scope.playerReverse;
-            else {
+            } else {
                 $scope.playerReverse = false;
                 $scope.playerPredicate = sort;
             }
@@ -238,24 +299,23 @@
         $scope.loadData();
 
         setInterval($scope.refreshingIn, 1000);
-        setInterval($scope.loadData, 30000);
     });
 
 
 </script>
 
 <div ng-app="scoreboardApp" ng-controller="ScoreboardCtrl">
-    <h3><span ng-click="showPlayerRankings = false;">Our Rankings</span> | <span ng-click="showPlayerRankings = true;">Player Rankings</span></h3>
+    <h3><span ng-click="showPlayerRankings = false; setPlayerSort('default');" class="clickable">Our Rankings</span> | <span ng-click="showPlayerRankings = true; setPlayerSort('default');" class="clickable">Player Rankings</span></h3>
     <h4>Refreshing in {{refresh}}</h4>
     <table ng-show="showPlayerRankings">
         <tr>
-            <td ng-click="setPlayerSort('lName')"><strong>Player</strong></td>
-            <td ng-click="setPlayerSort('scoreKey')"><strong>Score</strong></td>
-            <td ng-click="setPlayerSort('todayKey')"><strong>Today</strong></td>
-            <td ng-click="setPlayerSort('thru')"><strong>Thru</strong></td>
-            <td ng-click="setPlayerSort('pickedBy')"><strong>Picked By</strong></td>
+            <td class="clickable" ng-click="setPlayerSort('lName')">Player</td>
+            <td class="clickable" ng-click="setPlayerSort('scoreKey')">Score</td>
+            <td class="clickable" ng-click="setPlayerSort('todayKey')">Today</td>
+            <td class="clickable" ng-click="setPlayerSort('thru')">Thru</td>
+            <td class="clickable" ng-click="setPlayerSort('pickedBy')">Picked By</td>
         </tr>
-        <tr ng-repeat="player in scores.player | orderBy:playerPredicate:playerReverse">
+        <tr ng-repeat="player in scores.player | orderBy:playerPredicate:playerReverse" ng-class="player.status">
             <td class="col-md-2">{{player.fName}} {{player.lName}}</td>
             <td class="col-md-1">{{player.score}}</td>
             <td class="col-md-1">{{player.today}}</td>
@@ -263,15 +323,21 @@
             <td class="col-md-4">{{player.pickedBy}}</td>
         </tr>
     </table>
-    <br/>
+    <div ng-hide="showPlayerRankings" style="margin-left:32px; margin-bottom: 6px;"><span class="clickable" ng-click="setExpanded(false)">Collapse All</span> | <span class="clickable" ng-click="setExpanded(true)">Expand All</span></div>
     <ul ng-hide="showPlayerRankings">
         <li ng-repeat="person in shenanigans | orderBy:personPredicate:personReverse" style="list-style:none">
-            <strong ng-click="person.expanded = !person.expanded"><span class="col-md-2">{{person.name}}</span><span class="col-md-2">{{person.score}}</span>({{getDelta(person)}} today)</strong>
+            <div class="clickable" ng-click="person.expanded = !person.expanded"><span class="col-md-2">{{person.name}}</span><span class="col-md-2">{{person.score}}</span>({{getDelta(person)}} today)</div>
             <table ng-show="person.expanded">
-                <tr><td class="col-md-1"></td><td class="col-md-5">Player</td><td class="col-md-2">Score</td><td class="col-md-2">Today</td><td class="col-md-2">Thru</td></tr>
-                <tr ng-repeat="pick in person.picks | orderBy:pickPredicate:pickReverse">
+                <tr>
                     <td class="col-md-1"></td>
-                    <td class="col-md-5">{{pick.name}}  ({{pick.tier}})</td>
+                    <td class="clickable" ng-click="setPlayerSort('tier')"><strong>Player</strong></td>
+                    <td class="clickable" ng-click="setPlayerSort('scoreKey')"><strong>Score</strong></td>
+                    <td class="clickable" ng-click="setPlayerSort('todayKey')"><strong>Today</strong></td>
+                    <td class="clickable" ng-click="setPlayerSort('thru')"><strong>Thru</strong></td>
+                </tr>
+                <tr ng-repeat="pick in person.picks | orderBy:playerPredicate:playerReverse" ng-class="pick.status">
+                    <td class="col-md-1"></td>
+                    <td class="col-md-6">{{pick.name}}  ({{pick.tier}})</td>
                     <td class="col-md-2">{{pick.score}}</td>
                     <td class="col-md-2">{{pick.today}}</td>
                     <td class="col-md-2">{{pick.thru}}</td>
