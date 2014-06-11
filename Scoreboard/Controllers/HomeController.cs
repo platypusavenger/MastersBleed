@@ -24,9 +24,24 @@ namespace Scoreboard.Controllers
 
         public ActionResult Scoreboard()
         {
-            ViewBag.Messsage = "Masters Scorebaord";
+            ViewBag.Message = "Current Scoreboard";
+
+            return RedirectToAction("USO_2014", "Home");
+        }
+
+        public ActionResult Masters_2014()
+        {
+            ViewBag.Message = "Master's Scoreboard";
 
             return View();
         }
+
+        public ActionResult USO_2014()
+        {
+            ViewBag.Messsage = "US Open Scorebaord";
+
+            return View();
+        }
+
     }
 }
