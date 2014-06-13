@@ -70,15 +70,15 @@
             'expanded': true,
             'picks': [
                 { 'id': '1810', 'tier': 'A' },
-                { 'id': '28089', 'tier': 'B' },
-                { 'id': '27649', 'tier': 'B' },
-                { 'id': '', 'tier': 'C' },
-                { 'id': '', 'tier': 'C' },
-                { 'id': '', 'tier': 'C' },
-                { 'id': '', 'tier': 'D' },
-                { 'id': '', 'tier': 'D' },
-                { 'id': '', 'tier': 'D' },
-                { 'id': '', 'tier': 'D' }
+                { 'id': '23108', 'tier': 'B' },
+                { 'id': '6527', 'tier': 'B' },
+                { 'id': '24924', 'tier': 'C' },
+                { 'id': '27895', 'tier': 'C' },
+                { 'id': '19958', 'tier': 'C' },
+                { 'id': '22371', 'tier': 'D' },
+                { 'id': '36689', 'tier': 'D' },
+                { 'id': '10860', 'tier': 'D' },
+                { 'id': '20472', 'tier': 'D' }
             ]
         };
 
@@ -137,7 +137,7 @@
         };
 
         $scope.brianO = {
-            'name': "Brian O'Conner",
+            'name': "Brian O'Connor",
             'score': 0,
             'expanded': true,
             'picks': [
@@ -223,9 +223,11 @@
                     if (currentPlayer.today == 'E' || currentPlayer.today.substring(0, 1) == '+' || currentPlayer.today.substring(0, 1) == '-') {
                         todayString = currentPlayer.today;
                     }
-                    currentPlayer.todayKey = $scope.getScoreNumber(todayString);
-                    currentPerson.score += $scope.getScoreNumber(info.score);
-                    currentPerson.base += (currentPlayer.scoreKey - currentPlayer.todayKey);
+                    if (currentPlayer.score == 'E' || currentPlayer.score.substring(0, 1) == '+' || currentPlayer.score.substring(0, 1) == '-') {
+                        currentPlayer.todayKey = $scope.getScoreNumber(todayString);
+                        currentPerson.score += $scope.getScoreNumber(info.score);
+                        currentPerson.base += (currentPlayer.scoreKey - currentPlayer.todayKey);
+                    }
 
                     if (typeof $scope.scoreCache[info.id] == 'undefined') {
                         $scope.scoreCache[info.id] = { 'thru': info.thru, 'score': info.scoreKey, 'status': 'scoreHold' };
@@ -280,7 +282,14 @@
                             $scope.scores.player[i].pickedBy += ", ";
                         $scope.scores.player[i].pickedBy += pickedBy;
                     }
-                    return $scope.scores.player[i];
+
+                    var result = $scope.scores.player[i];
+                    if (result.score == '')
+                        result.scoreKey = 0;
+                    if (result.thru == '')
+                        result.thruKey = 0;
+
+                    return result;
                 }
             }
 
