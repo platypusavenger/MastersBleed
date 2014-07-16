@@ -12,6 +12,33 @@
     @RenderSection("scripts", required: false)
     <script src="~/Scripts/angular.min.js"></script>
 
+    <style>
+        .clickable {
+            cursor: pointer;
+            font-weight: bold;
+            color: darkblue;
+        }
+
+            .clickable:hover {
+                color: orange;
+            }
+
+            .clickable:active {
+                color: darkorange;
+            }
+
+        .scoreIncrease {
+            color: green;
+        }
+
+        .scoreDecrease {
+            color: red;
+        }
+
+        .scoreHold {
+            color: black;
+        }
+    </style>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -22,10 +49,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Current Scoreboard", "USO_2014", "Home", null, new { @class = "navbar-brand" })
+                @Html.ActionLink("Current Scoreboard", "BritishOpen_2014", "Home", null, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("2014 British Open", "BritishOpen_2014", "Home")</li>
                     <li>@Html.ActionLink("2014 US Open", "USO_2014", "Home")</li>
                     <li>@Html.ActionLink("2014 Master's", "Masters_2014", "Home")</li>
                 </ul>
@@ -34,6 +62,49 @@
     </div>
     <div class="container body-content">
         @RenderBody()
+        <div ng-app="scoreboardApp" ng-controller="ScoreboardCtrl">
+            <h2>@Html.Raw(ViewBag.Title)</h2>
+            <h3><span ng-click="showPlayerRankings = false; setPlayerSort('default');" class="clickable">Our Rankings</span> | <span ng-click="showPlayerRankings = true; setPlayerSort('default');" class="clickable">Player Rankings</span></h3>
+            <h4>Refreshing in {{refresh}}</h4>
+            <table ng-show="showPlayerRankings">
+                <tr>
+                    <td class="clickable" ng-click="setPlayerSort('lName')">Player</td>
+                    <td class="clickable" ng-click="setPlayerSort('scoreKey')">Score</td>
+                    <td class="clickable" ng-click="setPlayerSort('todayKey')">Today</td>
+                    <td class="clickable" ng-click="setPlayerSort('thru')">Thru</td>
+                    <td class="clickable" ng-click="setPlayerSort('pickedBy')">Picked By</td>
+                </tr>
+                <tr ng-repeat="player in scores.player | orderBy:playerPredicate:playerReverse" ng-class="player.status">
+                    <td class="col-md-2">{{player.fName}} {{player.lName}}</td>
+                    <td class="col-md-1">{{player.score}}</td>
+                    <td class="col-md-1">{{player.today}}</td>
+                    <td class="col-md-1">{{player.thru}}</td>
+                    <td class="col-md-4">{{player.pickedBy}}</td>
+                </tr>
+            </table>
+            <div ng-hide="showPlayerRankings" style="margin-left:32px; margin-bottom: 6px;"><span class="clickable" ng-click="setExpanded(false)">Collapse All</span> | <span class="clickable" ng-click="setExpanded(true)">Expand All</span></div>
+            <ul ng-hide="showPlayerRankings">
+                <li ng-repeat="person in shenanigans | orderBy:personPredicate:personReverse" style="list-style:none">
+                    <div class="clickable" ng-click="person.expanded = !person.expanded"><span class="col-md-2">{{person.name}}</span><span class="col-md-2">{{person.score}}</span>({{getDelta(person)}} today)</div>
+                    <table ng-show="person.expanded">
+                        <tr>
+                            <td class="col-md-1"></td>
+                            <td class="clickable" ng-click="setPlayerSort('tier')"><strong>Player</strong></td>
+                            <td class="clickable" ng-click="setPlayerSort('scoreKey')"><strong>Score</strong></td>
+                            <td class="clickable" ng-click="setPlayerSort('todayKey')"><strong>Today</strong></td>
+                            <td class="clickable" ng-click="setPlayerSort('thru')"><strong>Thru</strong></td>
+                        </tr>
+                        <tr ng-repeat="pick in person.picks | orderBy:playerPredicate:playerReverse" ng-class="pick.status">
+                            <td class="col-md-1"></td>
+                            <td class="col-md-6">{{pick.name}}  ({{pick.tier}})</td>
+                            <td class="col-md-2">{{pick.score}}</td>
+                            <td class="col-md-2">{{pick.today}}</td>
+                            <td class="col-md-2">{{pick.thru}}</td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+        </div>
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - Slabs Scoreboard</p>

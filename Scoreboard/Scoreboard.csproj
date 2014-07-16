@@ -130,6 +130,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SampleController.cs" />
     <Compile Include="Controllers\ScoreboardController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -137,6 +138,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App_Data\BritishOpen2014.json" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\DataTables-1.9.4\docs\media\css\doc.css" />
@@ -581,6 +583,7 @@
     <Content Include="Views\Home\Masters_2014.cshtml" />
     <Content Include="Scripts\version.json" />
     <Content Include="Views\Home\USO_2014.cshtml" />
+    <Content Include="Views\Home\BritishOpen_2014.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

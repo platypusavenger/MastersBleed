@@ -26,7 +26,7 @@ namespace Scoreboard.Controllers
         {
             ViewBag.Message = "Current Scoreboard";
 
-            return RedirectToAction("USO_2014", "Home");
+            return RedirectToAction("BritishOpen_2014", "Home");
         }
 
         public ActionResult Masters_2014()
@@ -39,6 +39,13 @@ namespace Scoreboard.Controllers
         public ActionResult USO_2014()
         {
             ViewBag.Messsage = "US Open Scorebaord";
+
+            return View();
+        }
+
+        public ActionResult BritishOpen_2014()
+        {
+            ViewBag.Message = "British Open Scoreboard";
 
             return View();
         }
