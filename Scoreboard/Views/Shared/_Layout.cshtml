@@ -68,6 +68,7 @@
             <h4>Refreshing in {{refresh}}</h4>
             <table ng-show="showPlayerRankings">
                 <tr>
+                    <td class="clickable" ng-click="setPlayerSort('pos')">Pos</td>
                     <td class="clickable" ng-click="setPlayerSort('lName')">Player</td>
                     <td class="clickable" ng-click="setPlayerSort('scoreKey')">Score</td>
                     <td class="clickable" ng-click="setPlayerSort('todayKey')">Today</td>
@@ -75,6 +76,7 @@
                     <td class="clickable" ng-click="setPlayerSort('pickedBy')">Picked By</td>
                 </tr>
                 <tr ng-repeat="player in scores.player | orderBy:playerPredicate:playerReverse" ng-class="player.status">
+                    <td class="col-md-1">{{player.pos}}</td>
                     <td class="col-md-2">{{player.fName}} {{player.lName}}</td>
                     <td class="col-md-1">{{player.score}}</td>
                     <td class="col-md-1">{{player.today}}</td>
@@ -85,7 +87,7 @@
             <div ng-hide="showPlayerRankings" style="margin-left:32px; margin-bottom: 6px;"><span class="clickable" ng-click="setExpanded(false)">Collapse All</span> | <span class="clickable" ng-click="setExpanded(true)">Expand All</span></div>
             <ul ng-hide="showPlayerRankings">
                 <li ng-repeat="person in shenanigans | orderBy:personPredicate:personReverse" style="list-style:none">
-                    <div class="clickable" ng-click="person.expanded = !person.expanded"><span class="col-md-2">{{person.name}}</span><span class="col-md-2">{{person.score}}</span>({{getDelta(person)}} today)</div>
+                    <div class="clickable" ng-click="person.expanded = !person.expanded"><span class="col-md-2">{{person.name}}</span><span class="col-md-2">{{person.score}}</span><span class="col-md-2">({{getDelta(person)}} today)</span>({{person.cutPenalty}} Penalty)</div>
                     <table ng-show="person.expanded">
                         <tr>
                             <td class="col-md-1"></td>
@@ -93,17 +95,26 @@
                             <td class="clickable" ng-click="setPlayerSort('scoreKey')"><strong>Score</strong></td>
                             <td class="clickable" ng-click="setPlayerSort('todayKey')"><strong>Today</strong></td>
                             <td class="clickable" ng-click="setPlayerSort('thru')"><strong>Thru</strong></td>
+                            <td class="clickable" ng-click="setPlayerSort('cutPenalty')"><strong>Pen</strong></td>
                         </tr>
                         <tr ng-repeat="pick in person.picks | orderBy:playerPredicate:playerReverse" ng-class="pick.status">
                             <td class="col-md-1"></td>
-                            <td class="col-md-6">{{pick.name}}  ({{pick.tier}})</td>
+                            <td>{{pick.name}}  ({{pick.tier}})</td>
                             <td class="col-md-2">{{pick.score}}</td>
                             <td class="col-md-2">{{pick.today}}</td>
                             <td class="col-md-2">{{pick.thru}}</td>
+                            <td>{{pick.cutPenalty}}</td>
                         </tr>
                     </table>
                 </li>
             </ul>
+            <div ng-hide="!cutPenalty">
+                <hr />
+                <div><strong>Projected Cut: </strong> +{{cutLine}}</div>
+                <div><strong>Projected Cut Penalty: </strong>{{cutPenalty}} Per Day</div>
+                <div><strong>Total Score: </strong>{{totalScore}}</div>
+                <div><strong>Avg Score: </strong>{{avgScore}}</div>
+            </div>
         </div>
         <hr />
         <footer>

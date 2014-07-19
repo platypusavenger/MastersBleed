@@ -16,6 +16,10 @@
         $scope.pickReverse = false;
         $scope.playerPredicate = 'scoreKey';
         $scope.playerReverse = false;
+        $scope.cutLine = 'E';
+        $scope.cutPenalty = 'E';
+        $scope.totalScore = 0;
+        $scope.avgScore = 0;
 
         $scope.scores = {};
         $scope.scoreCache = {};
@@ -188,9 +192,26 @@
         $scope.scoresCallback = function (scores) {
             var fixedScores = scrubOpenData(scores);
             $scope.scores = fixedScores.homeScores;
+            $scope.cutLine = '';
+            $scope.cutPenalty = '';
+            $scope.totalScore = 0;
+            $scope.avgScore = 0;
+
 
             // Add data to each player for who has picked them
             for (var i = 0; i < $scope.scores.player.length; i++) {
+                // British Open:  Top 70 Advance
+                var position = $scope.scores.player[i].pos;
+                if (position.substring(0, 1) == 'T')
+                    position = parseInt(position.substring(1, position.length));
+
+                if (position <= 70)
+                    $scope.cutLine = $scope.scores.player[i].score;
+
+                // British Open:  80th Percentile is position 124
+                if (position > 123 && $scope.cutPenalty == '')
+                    $scope.cutPenalty = $scope.scores.player[i].score;
+
                 $scope.scores.player[i].pickedBy = "";
                 $scope.scores.player[i].scoreKey = $scope.getScoreNumber($scope.scores.player[i].score);
                 $scope.scores.player[i].todayKey = $scope.getScoreNumber($scope.scores.player[i].today);
@@ -200,10 +221,27 @@
                     $scope.scores.player[i].status = $scope.scoreCache[$scope.scores.player[i].id].status;
             }
 
+            // Add a projected cut penalty
+            // British open replaces rank with CUT -- fix it!
+            $scope.cutPenalty = 8;
+            for (var i = 0; i < $scope.scores.player.length; i++) {
+                var position = $scope.scores.player[i].pos;
+                if (position.substring(0, 1) == 'T')
+                    position = parseInt(position.substring(1, position.length));
+
+                if (position <= 70)
+                    $scope.scores.player[i].cutPenalty = '';
+                else
+                    $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
+                $scope.totalScore += $scope.getScoreNumber($scope.scores.player[i].score);
+            }
+            $scope.avgScore = Math.ceil($scope.totalScore / ($scope.scores.player.length - 2));
+
             for (var i = 0; i < $scope.shenanigans.length; i++) {
                 var currentPerson = $scope.shenanigans[i];
                 currentPerson.score = 0;
                 currentPerson.base = 0;
+                currentPerson.cutPenalty = 0;
                 for (var j = 0; j < currentPerson.picks.length; j++) {
                     var currentPlayer = currentPerson.picks[j];
                     var info = $scope.matchPlayerInfo(currentPlayer.id, currentPerson.name);
@@ -213,6 +251,12 @@
                     currentPlayer.thru = info.thru;
                     currentPlayer.status = info.status;
                     currentPlayer.scoreKey = $scope.getScoreNumber(info.score);
+                    currentPlayer.cutPenalty = info.cutPenalty;
+                    if (info.cutPenalty != '') {
+                        currentPerson.scoreKey += $scope.getScoreNumber(info.score);
+                        currentPerson.score += $scope.getScoreNumber(info.cutPenalty);
+                        currentPerson.cutPenalty += $scope.getScoreNumber(info.cutPenalty);
+                    }
                     var todayString = 'E';
                     if (currentPlayer.today == 'E' || currentPlayer.today.substring(0, 1) == '+' || currentPlayer.today.substring(0, 1) == '-') {
                         todayString = currentPlayer.today;
@@ -241,6 +285,7 @@
                     }
                 }
             }
+
         };
 
         // British Open uses a different data provider -- scrub it to one we know how to work with
@@ -250,14 +295,19 @@
             // Not actually using the global round anywhere
             result.homeScores.round = "TBD";
             result.homeScores.player = [];
+            var lastPos = scores.aaData[0].Position.SortValue;
             for (var i = 0; i < scores.aaData.length; i++) {
                 var newPlayer = {};
-                newPlayer.pos = scores.aaData[i].Position.SortValue;
+                newPlayer.pos = scores.aaData[i].Position.DisplayValue;
+                if (newPlayer.pos == 'CUT') {
+                    newPlayer.pos = "" + scores.aaData[i].Position.SortValue;
+                }
+                
                 newPlayer.dName = scores.aaData[i].Name;
                 newPlayer.fName = scores.aaData[i].Name.split(",")[1];
                 newPlayer.lName = scores.aaData[i].Name.split(",")[0];
                 newPlayer.id = scores.aaData[i].ID;
-                newPlayer.score = scores.aaData[i].Total
+                newPlayer.score = scores.aaData[i].ToPar;
                 newPlayer.today = scores.aaData[i].Today;
                 newPlayer.thru = scores.aaData[i].Hole;
                 newPlayer.order = scores.aaData[i].R1 + "|" + scores.aaData[i].R2 + "|" + scores.aaData[i].R3 + "|" + scores.aaData[i].R4;
@@ -276,7 +326,7 @@
         };
 
         $scope.getDelta = function (person) {
-            var delta = person.score - person.base;
+            var delta = person.score - person.base - person.cutPenalty;
             var value = "";
             if (delta > 0)
                 value = "+" + delta;
@@ -294,7 +344,7 @@
         };
 
         $scope.getScoreNumber = function (scoreString) {
-            if (scoreString == 'E')
+            if (scoreString == 'E' || scoreString == '')
                 return 0;
             else
                 return parseInt(scoreString);
