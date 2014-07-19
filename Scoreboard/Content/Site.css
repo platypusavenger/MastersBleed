@@ -7,6 +7,9 @@
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    background: #fff;
+    background: rgba(255,255,255,0.7);
+    position: relative;
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
@@ -39,4 +42,105 @@ input[type="checkbox"].input-validation-error {
 
 .validation-summary-valid {
     display: none;
+}
+
+
+
+/* Overrides */
+.navbar-collapse {
+    overflow-x: hidden;
+}
+.navbar-collapse ul {
+    margin: 0px;
+}
+
+
+/* Generics */
+.pad0 {
+    padding: 0px;
+}
+
+
+
+/* Logos/Navigation */
+.navbar {
+    background: #fff;
+}
+.nav_item:hover {
+    background-color: #eee;
+}
+.nav_item a {
+    min-width: 180px;
+    height: 50px;
+}
+.nav_theopen a {
+    background: url(../images/theopen_logo.png) no-repeat center center;
+}
+.nav_usopen a {
+    background: url(../images/usopen_logo.png) no-repeat center center;
+}
+.nav_masters a {
+    background: url(../images/masters_logo.png) no-repeat center center;
+}
+
+
+/* Scoreboard layout */
+.timer_refresh {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: small;
+    width: 100px;
+    text-align: left;
+}
+.main_tabs {
+    margin-bottom: 20px;
+    border-bottom: 2px solid #999;
+}
+.list_tab {
+    color: #999!important;
+    margin-right: 30px;
+}
+.list_tab:hover {
+    color: #666!important;
+}
+.selected_tab, .selected_tab:hover {
+    color: #333!important;
+    border-bottom: 2px solid #333;
+}
+
+
+/* Tables */
+.player_rankings .header {
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    background-color: rgba(255,255,255,0.4);
+    color: #333;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select:none;
+    user-select:none;
+}
+.sort_arrow {
+    height: 12px;
+}
+.sortedUp {
+    background-image: url(../images/icon_arrow_up.png);
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 10%;
+}
+
+.submission_rankings td {
+    min-width: 50px;
+}
+.submission_rankings .header {
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    background-color: rgba(255,255,255,0.4);
+    color: #333;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select:none;
+    user-select:none;
 }

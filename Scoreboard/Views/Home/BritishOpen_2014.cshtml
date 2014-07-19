@@ -1,7 +1,16 @@
 ﻿@{
     ViewBag.Title = "British Open Scoreboard";
 }
+<style>
+    body {
+        background: url(../images/theopen.jpg) center center no-repeat fixed;
+        background-size: cover;
+    }
 
+    .nav_theopen a {
+        background-color: #ddd;
+    }
+</style>
 <script>
     var base_url = '/Scoreboard';
     if (window.location.hostname == 'localhost')
