@@ -210,16 +210,16 @@
             // Add data to each player for who has picked them
             for (var i = 0; i < $scope.scores.player.length; i++) {
                 // British Open:  Top 70 Advance
-                var position = $scope.scores.player[i].pos;
-                if (position.substring(0, 1) == 'T')
-                    position = parseInt(position.substring(1, position.length));
+                //var position = $scope.scores.player[i].pos;
+                //if (position.substring(0, 1) == 'T')
+                //    position = parseInt(position.substring(1, position.length));
 
-                if (position <= 70)
-                    $scope.cutLine = $scope.scores.player[i].score;
+                //if (position <= 70)
+                //    $scope.cutLine = $scope.scores.player[i].score;
 
                 // British Open:  80th Percentile is position 124
-                if (position > 123 && $scope.cutPenalty == '')
-                    $scope.cutPenalty = $scope.scores.player[i].score;
+                //if (position > 123 && $scope.cutPenalty == '')
+                //    $scope.cutPenalty = $scope.scores.player[i].score;
 
                 $scope.scores.player[i].pickedBy = "";
                 $scope.scores.player[i].scoreKey = $scope.getScoreNumber($scope.scores.player[i].score);
@@ -232,6 +232,7 @@
 
             // Add a projected cut penalty
             // British open replaces rank with CUT -- fix it!
+            $scope.cutLine = 2;
             $scope.cutPenalty = 8;
             for (var i = 0; i < $scope.scores.player.length; i++) {
                 var position = $scope.scores.player[i].pos;
