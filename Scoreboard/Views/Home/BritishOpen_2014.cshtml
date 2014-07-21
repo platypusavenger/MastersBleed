@@ -29,6 +29,7 @@
         $scope.cutPenalty = 'E';
         $scope.totalScore = 0;
         $scope.avgScore = 0;
+        $scope.showPenalty = true;
 
         $scope.scores = {};
         $scope.scoreCache = {};
@@ -238,14 +239,14 @@
                 var position = $scope.scores.player[i].pos;
                 if (position.substring(0, 1) == 'T')
                     position = parseInt(position.substring(1, position.length));
-
+                
                 if (position <= 70)
                     $scope.scores.player[i].cutPenalty = '';
                 else
                     $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
                 $scope.totalScore += $scope.getScoreNumber($scope.scores.player[i].score);
             }
-            $scope.avgScore = Math.ceil($scope.totalScore / ($scope.scores.player.length - 2));
+            $scope.avgScore = Math.ceil($scope.totalScore / ($scope.scores.player.length - 1));
 
             for (var i = 0; i < $scope.shenanigans.length; i++) {
                 var currentPerson = $scope.shenanigans[i];
@@ -263,8 +264,10 @@
                     currentPlayer.scoreKey = $scope.getScoreNumber(info.score);
                     currentPlayer.cutPenalty = info.cutPenalty;
                     if (info.cutPenalty != '') {
-                        currentPerson.scoreKey += $scope.getScoreNumber(info.score);
-                        currentPerson.score += $scope.getScoreNumber(info.cutPenalty);
+                        if ($scope.showPenalty) {
+                            currentPerson.scoreKey += $scope.getScoreNumber(info.score);
+                            currentPerson.score += $scope.getScoreNumber(info.cutPenalty);
+                        }
                         currentPerson.cutPenalty += $scope.getScoreNumber(info.cutPenalty);
                     }
                     var todayString = 'E';
@@ -336,7 +339,9 @@
         };
 
         $scope.getDelta = function (person) {
-            var delta = person.score - person.base - person.cutPenalty;
+            var delta = person.score - person.base;
+            if ($scope.showPenalty)
+                delta = delta - person.cutPenalty;
             var value = "";
             if (delta > 0)
                 value = "+" + delta;

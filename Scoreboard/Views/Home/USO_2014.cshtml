@@ -19,7 +19,7 @@
     angular.module('scoreboardApp', []).controller('ScoreboardCtrl', function ($scope, $http) {
         $scope.showPlayerRankings = false;
         $scope.refresh = 30;
-        $scope.personPredicate = 'score';
+        $scope.personPredicate = 'score'; 
         $scope.personReverse = false;
         $scope.pickPredicate = 'scoreKey';
         $scope.pickReverse = false;
@@ -29,6 +29,7 @@
         $scope.cutPenalty = '';
         $scope.totalScore = 0;
         $scope.avgScore = 0;
+        $scope.showPenalty = false;
 
         $scope.scores = {};
         $scope.scoreCache = {};
