@@ -65,8 +65,10 @@
         @RenderBody()
         <div ng-app="scoreboardApp" ng-controller="ScoreboardCtrl">
             <!--h2>@Html.Raw(ViewBag.Title)</h2-->
-            <h3 class="main_tabs"><span ng-click="showPlayerRankings = false; setPlayerSort('default');" class="clickable list_tab" ng-class="{ selected_tab: !showPlayerRankings }">Our Rankings</span>
-                <span ng-click="showPlayerRankings = true; setPlayerSort('default');" class="clickable list_tab" ng-class="{ selected_tab: showPlayerRankings }">Player Rankings</span></h3>
+            <h3 class="main_tabs">
+                <span ng-click="showPlayerRankings = false; setPlayerSort('default');" class="clickable list_tab" ng-class="{ selected_tab: !showPlayerRankings }">Our Rankings</span>
+                <span ng-click="showPlayerRankings = true; setPlayerSort('default');" class="clickable list_tab" ng-class="{ selected_tab: showPlayerRankings }">Player Rankings</span>
+            </h3>
             <h4 class="timer_refresh">Refreshing in {{refresh}}</h4>
             <table ng-show="showPlayerRankings" class="player_rankings">
                 <tr>
@@ -86,10 +88,15 @@
                     <td class="col-md-4">{{player.pickedBy}}</td>
                 </tr>
             </table>
-            <div ng-hide="showPlayerRankings" style="margin-left:32px; margin-bottom: 6px;"><span class="clickable" ng-click="setExpanded(false)">Collapse All</span> | <span class="clickable" ng-click="setExpanded(true)">Expand All</span></div>
+            <div ng-hide="showPlayerRankings" style="margin-left:32px; margin-bottom: 6px;">
+                <span class="clickable" ng-click="setExpanded(false)">Collapse All</span> | 
+                <span class="clickable" ng-click="setExpanded(true)">Expand All</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span ng-hide="!cutPenalty" ng-click="showPenalty=!showPenalty; refresh=0;" class="clickable">Toggle Penalty</span>
+            </div>
+
             <ul ng-hide="showPlayerRankings">
                 <li ng-repeat="person in shenanigans | orderBy:personPredicate:personReverse" style="list-style:none">
-                    <div class="clickable" ng-click="person.expanded = !person.expanded"><span class="col-md-2">{{person.name}}</span><span class="col-md-2">{{person.score}}</span><span class="col-md-2">({{getDelta(person)}} today)</span>({{person.cutPenalty}} Penalty)</div>
+                    <div class="clickable" ng-click="person.expanded = !person.expanded"><span class="col-md-2">{{person.name}}</span><span class="col-md-2">{{person.score}}</span><span class="col-md-2">({{getDelta(person)}} today)</span><span ng-hide="!cutPenalty">({{person.cutPenalty}} Penalty)</span><br/></div>
                     <table ng-show="person.expanded" class="submission_rankings">
                         <tr>
                             <td class="col-md-1"></td>
@@ -98,12 +105,12 @@
                             <td class="clickable header" ng-click="setPlayerSort('scoreKey')"><strong>Score</strong> <img src="../images/icon_arrow_up.png" alt="" class="sort_arrow" ng-if="playerPredicate == 'scoreKey' && !playerReverse" /><img src="../images/icon_arrow_down.png" alt="" class="sort_arrow" ng-if="playerPredicate == 'scoreKey' && playerReverse" /></td>
                             <td class="clickable header" ng-click="setPlayerSort('todayKey')"><strong>Today</strong> <img src="../images/icon_arrow_up.png" alt="" class="sort_arrow" ng-if="playerPredicate == 'todayKey' && !playerReverse" /><img src="../images/icon_arrow_down.png" alt="" class="sort_arrow" ng-if="playerPredicate == 'todayKey' && playerReverse" /></td>
                             <td class="clickable header" ng-click="setPlayerSort('thru')"><strong>Thru</strong> <img src="../images/icon_arrow_up.png" alt="" class="sort_arrow" ng-if="playerPredicate == 'thru' && !playerReverse" /><img src="../images/icon_arrow_down.png" alt="" class="sort_arrow" ng-if="playerPredicate == 'thru' && playerReverse" /></td>
-                            <td class="clickable header" ng-click="setPlayerSort('cutPenalty')"><strong>Pen</strong> <img src="../images/icon_arrow_up.png" alt="" class="sort_arrow" ng-if="playerPredicate == 'cutPenalty' && !playerReverse" /><img src="../images/icon_arrow_down.png" alt="" class="sort_arrow" ng-if="playerPredicate == 'cutPenalty' && playerReverse" /></td>
+                            <td class="clickable header" ng-click="setPlayerSort('cutPenalty')"><strong ng-hide="!cutPenalty">Pen</strong> <img src="../images/icon_arrow_up.png" alt="" class="sort_arrow" ng-if="playerPredicate == 'cutPenalty' && !playerReverse" /><img src="../images/icon_arrow_down.png" alt="" class="sort_arrow" ng-if="playerPredicate == 'cutPenalty' && playerReverse" /></td>
                         </tr>
                         <tr ng-repeat="pick in person.picks | orderBy:playerPredicate:playerReverse" ng-class="pick.status">
                             <td class="col-md-1"></td>
                             <td>{{pick.tier}}</td>
-                            <td style="width: 50%;">{{pick.name}}</td>
+                            <td style="width: 40%;">{{pick.name}}</td>
                             <td class="col-md-2">{{pick.score}}</td>
                             <td class="col-md-2">{{pick.today}}</td>
                             <td class="col-md-2">{{pick.thru}}</td>
