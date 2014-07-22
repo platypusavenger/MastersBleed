@@ -228,10 +228,15 @@
     <Content Include="images\icon_arrow_up.png" />
     <Content Include="images\masters.jpg" />
     <Content Include="images\masters_logo.png" />
+    <Content Include="images\masters_raining.png" />
+    <Content Include="images\pga.jpg" />
+    <Content Include="images\pga_raining.jpg" />
     <Content Include="images\theopen.jpg" />
     <Content Include="images\theopen_logo.png" />
+    <Content Include="images\theopen_raining.png" />
     <Content Include="images\usopen.jpg" />
     <Content Include="images\usopen_logo.png" />
+    <Content Include="images\usopen_raining.png" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
     <Content Include="Scripts\angular-cookies.js" />
@@ -573,6 +578,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\shared.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
