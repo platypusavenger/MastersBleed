@@ -3,15 +3,27 @@
 }
 <style>
     body {
-        background: url(../images/theopen.jpg) center center no-repeat fixed;
+        background: center center no-repeat fixed;
         background-size: cover;
     }
-
     .nav_theopen a {
         background-color: #ddd;
     }
 </style>
 <script>
+
+    var config = {
+        location: {
+            address: 'Meols Dr, Hoylake, Wirral CH47 4AL, United Kingdom',
+            lat: '53.3875223',
+            lng: '-3.1836963'
+        },
+        backgrounds: {
+            default: 'theopen.jpg',
+            raining: 'theopen_raining.png'
+        }
+    };
+
     var base_url = '/Scoreboard';
     if (window.location.hostname == 'localhost')
         base_url = '';

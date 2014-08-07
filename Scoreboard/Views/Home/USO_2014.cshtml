@@ -3,7 +3,7 @@
 }
 <style>
     body {
-        background: url(../images/usopen.jpg) center center no-repeat fixed;
+        background: center center no-repeat fixed;
         background-size: cover;
     }
 
@@ -12,6 +12,19 @@
     }
 </style>
 <script>
+
+    var config = {
+        location: {
+            address: 'Pinehurst, North Carolina',
+            lat: '35.1954345',
+            lng: '-79.4694767'
+        },
+        backgrounds: {
+            default: 'usopen.jpg',
+            raining: 'usopen_raining.png'
+        }
+    };
+
     var base_url = '/Scoreboard';
     if (window.location.hostname == 'localhost')
         base_url = '';

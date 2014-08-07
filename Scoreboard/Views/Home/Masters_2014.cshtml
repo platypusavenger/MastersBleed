@@ -12,6 +12,19 @@
     }
 </style>
 <script>
+
+    var config = {
+        location: {
+            address: '2604 Washington Rd, Augusta, GA 30904',
+            lat: '33.50058',
+            lng: '-82.02205400000001'
+        },
+        backgrounds: {
+            default: 'masters.jpg',
+            raining: 'masters_raining.png'
+        }
+    };
+
     var base_url = '/Scoreboard';
     if (window.location.hostname == 'localhost')
         base_url = '';
