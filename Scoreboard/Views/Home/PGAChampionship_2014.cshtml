@@ -2,17 +2,31 @@
 @{
     ViewBag.Title = "PGA Championship Scoreboard";
 }
+@Styles.Render("~/Content/css")
 <style>
     body {
-        background: url(../images/theopen.jpg) center center no-repeat fixed;
+        background: url(../images/pga.jpg) center center no-repeat fixed;
         background-size: cover;
     }
 
-    .nav_theopen a {
+    .nav_pga a {
         background-color: #ddd;
     }
 </style>
 <script>
+
+    var config = {
+        location: {
+            address: '15503 Shelbyville Rd, Louisville, KY 40243',
+            lat: '38.241469',
+            lng: '-85.471521'
+        },
+        backgrounds: {
+            default: 'pga.jpg',
+            raining: 'pga_raining.png'
+        }
+    };
+
     var base_url = '/Scoreboard';
     if (window.location.hostname == 'localhost')
         base_url = '';
@@ -30,7 +44,7 @@
         $scope.cutPenalty = 'E';
         $scope.totalScore = 0;
         $scope.avgScore = 0;
-        $scope.showPenalty = true;
+        $scope.showPenalty = false;
 
         $scope.scores = {};
         $scope.scoreCache = {};
@@ -191,14 +205,14 @@
                 var position = $scope.scores.player[i].pos;
                 if (position.substring(0, 1) == 'T')
                     position = parseInt(position.substring(1, position.length));
-
+            
                 if (position <= 70)
                     $scope.scores.player[i].cutPenalty = '';
                 else
                     $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
                 $scope.totalScore += $scope.getScoreNumber($scope.scores.player[i].score);
             }
-            $scope.avgScore = Math.ceil($scope.totalScore / ($scope.scores.player.length - 1));
+            $scope.avgScore = Math.ceil($scope.totalScore / ($scope.scores.player.length));
 
             for (var i = 0; i < $scope.shenanigans.length; i++) {
                 var currentPerson = $scope.shenanigans[i];

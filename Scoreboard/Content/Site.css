@@ -82,6 +82,9 @@ input[type="checkbox"].input-validation-error {
 .nav_masters a {
     background: url(../images/masters_logo.png) no-repeat center center;
 }
+.nav_pga a {
+    background: url(../images/pga_logo.png) no-repeat center center;
+}
 
 
 /* Scoreboard layout */
