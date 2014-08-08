@@ -231,6 +231,7 @@
     <Content Include="images\masters_raining.png" />
     <Content Include="images\pga.jpg" />
     <Content Include="images\pga_raining.jpg" />
+    <Content Include="images\pga_raining.png" />
     <Content Include="images\theopen.jpg" />
     <Content Include="images\theopen_logo.png" />
     <Content Include="images\theopen_raining.png" />
