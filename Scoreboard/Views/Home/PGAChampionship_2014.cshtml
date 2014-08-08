@@ -277,6 +277,13 @@
 
             var lastPos = scores.lb.p[0].cp;
             for (var i = 0; i < scores.lb.p.length; i++) {
+                // Jason Dufner withdrew, but the data no longer carries his score.  Manual Update!
+                if (scores.lb.p[i].pid == 25686) {
+                    scores.lb.p[i].cpr = 'E';
+                    scores.lb.p[i].tpr = '+5';
+                    scores.lb.p[i].th = 'WD';
+                }
+
                 var newPlayer = {};
                 newPlayer.pos = scores.lb.p[i].cp;
                 newPlayer.dName = scores.lb.p[i].fn + " " + scores.lb.p[i].ln;
