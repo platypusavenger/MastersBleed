@@ -284,6 +284,13 @@
                     scores.lb.p[i].th = 'WD';
                 }
 
+                // Kiradech Aphibarnrat withdrew, but the data no longer carries his score.  Manual Update!
+                if (scores.lb.p[i].pid == 30978) {
+                    scores.lb.p[i].cpr = 'E';
+                    scores.lb.p[i].tpr = '+6';
+                    scores.lb.p[i].th = 'WD';
+                }
+
                 var newPlayer = {};
                 newPlayer.pos = scores.lb.p[i].cp;
                 newPlayer.dName = scores.lb.p[i].fn + " " + scores.lb.p[i].ln;
