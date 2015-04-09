@@ -26,7 +26,14 @@ namespace Scoreboard.Controllers
         {
             ViewBag.Message = "Current Scoreboard";
 
-            return RedirectToAction("PGAChampionship_2014", "Home");
+            return RedirectToAction("Masters_2015", "Home");
+        }
+
+        public ActionResult Masters_2015()
+        {
+            ViewBag.Message = "Master's Scoreboard";
+
+            return View();
         }
 
         public ActionResult Masters_2014()

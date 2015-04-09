@@ -602,6 +602,7 @@
     <Content Include="Views\Home\USO_2014.cshtml" />
     <Content Include="Views\Home\BritishOpen_2014.cshtml" />
     <Content Include="Views\Home\PGAChampionship_2014.cshtml" />
+    <Content Include="Views\Home\Masters_2015.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
