@@ -200,8 +200,8 @@
             $scope.totalScore = 0;
             $scope.avgScore = 0;
 
-            $scope.cutLine = "E";
-            $scope.cutPenalty = "+8"
+            $scope.cutLine = "3";
+            $scope.cutPenalty = "+6"
             // Add data to each player for who has picked them
             for (var i = 0; i < $scope.scores.player.length; i++) {
                 // Masters:  Top ?? Advance
@@ -209,12 +209,13 @@
                 if (position.substring(0, 1) == 'T')
                     position = parseInt(position.substring(1, position.length));
 
-                if (position <= 70)
-                    $scope.cutLine = $scope.scores.player[i].score;
+                // Masters:  Cut = +3 or worse
+                //if (position <= 70)
+                //    $scope.cutLine = $scope.scores.player[i].score;
 
-                // Masters:  80th Percentile is position TBD
-                if (position > 124 && $scope.cutPenalty == '')
-                    $scope.cutPenalty = $scope.scores.player[i].score;
+                // Masters:  80th Percentile is position 78
+                //if (position > 77 && $scope.cutPenalty == '')
+                //    $scope.cutPenalty = $scope.scores.player[i].score;
 
                 $scope.scores.player[i].pickedBy = "";
                 $scope.scores.player[i].scoreKey = $scope.getScoreNumber($scope.scores.player[i].score);
@@ -228,20 +229,22 @@
             // Add a projected cut penalty
             for (var i = 0; i < $scope.scores.player.length; i++) {
                 var position = $scope.scores.player[i].pos;
-                //if (position.substring(0, 1) == 'T')
-                //    position = parseInt(position.substring(1, position.length));
+                if (position.substring(0, 1) == 'T')
+                    position = parseInt(position.substring(1, position.length));
             
-                //if (position <= 70)
-                //    $scope.scores.player[i].cutPenalty = '';
-                //else
-                //    $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
-                if (position == 'CUT' || $scope.scores.player[i].thru == 'WD')
+                if (position <= 50)
+                    $scope.scores.player[i].cutPenalty = '';
+                else
+                    $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
+
+                if (position == 'MC' || $scope.scores.player[i].thru == 'WD')
                     $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
                 else
                     $scope.scores.player[i].cutPenalty = '';
 
                 $scope.totalScore += $scope.getScoreNumber($scope.scores.player[i].score);
             }
+
             $scope.avgScore = Math.ceil($scope.totalScore / ($scope.scores.player.length));
 
             for (var i = 0; i < $scope.shenanigans.length; i++) {
@@ -259,11 +262,9 @@
                     currentPlayer.thru = info.thru;
                     currentPlayer.status = info.status;
                     currentPlayer.scoreKey = $scope.getScoreNumber(info.score);
-                    currentPlayer.cutPenalty = info.cutPenalty;
                     if (info.cutPenalty != '') {
-                        //currentPerson.cutPenalty += $scope.getScoreNumber(info.cutPenalty);
+                        currentPerson.cutPenalty += $scope.getScoreNumber(info.cutPenalty);
                         currentPerson.cutPlayers += 1;
-                        currentPerson.cutPenalty += currentPerson.cutPlayers;
                     }
                     var todayString = 'E';
                     if (currentPlayer.today == 'E' || currentPlayer.today.substring(0, 1) == '+' || currentPlayer.today.substring(0, 1) == '-') {
