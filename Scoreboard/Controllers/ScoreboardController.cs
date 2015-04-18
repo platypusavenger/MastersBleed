@@ -18,24 +18,24 @@ namespace Scoreboard.Controllers
         [Route("api/Scoreboard/Masters/2015")]
         public IHttpActionResult GetMasters2015()
         {
-            string serviceUrl = "http://www.masters.com/";
-            string endpoint = "en_US/xml/gen/homeScores/homeScores.json";
-            RestClient client = new RestClient(serviceUrl);
-            RestRequest request = new RestRequest(endpoint, Method.GET);
-            request.AddHeader("Content-Type", "application/json");
-            request.RequestFormat = DataFormat.Json;
+            //string serviceUrl = "http://www.masters.com/";
+            //string endpoint = "en_US/xml/gen/homeScores/homeScores.json";
+            //RestClient client = new RestClient(serviceUrl);
+            //RestRequest request = new RestRequest(endpoint, Method.GET);
+            //request.AddHeader("Content-Type", "application/json");
+            //request.RequestFormat = DataFormat.Json;
 
-            IRestResponse response = client.Execute(request);
-            return Ok(SimpleJson.DeserializeObject(response.Content));
+            //IRestResponse response = client.Execute(request);
+            //return Ok(SimpleJson.DeserializeObject(response.Content));
 
-            //// Masters results are finalized, just return the results file saved off locally instead
-            //string path = Path.Combine(HttpContext.Current.Request.PhysicalApplicationPath, @"App_Data\Masters2014.json");
-            //string readContents;
-            //using (StreamReader streamReader = new StreamReader(path, Encoding.UTF8))
-            //{
-            //    readContents = streamReader.ReadToEnd();
-            //}
-            //return Ok(SimpleJson.DeserializeObject(readContents));
+            // Masters results are finalized, just return the results file saved off locally instead
+            string path = Path.Combine(HttpContext.Current.Request.PhysicalApplicationPath, @"App_Data\Masters2015.json");
+            string readContents;
+            using (StreamReader streamReader = new StreamReader(path, Encoding.UTF8))
+            {
+                readContents = streamReader.ReadToEnd();
+            }
+            return Ok(SimpleJson.DeserializeObject(readContents));
         }
 
         // GET api/<controller>
