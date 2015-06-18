@@ -63,6 +63,24 @@ namespace Scoreboard.Controllers
         }
 
         // GET api/<controller>
+        [Route("api/Scoreboard/usopen/2015")]
+        public IHttpActionResult GetUSOpen2015()
+        {
+            string serviceUrl = "http://www.usopen.com/";
+            string endpoint = "en_US/xml/gen/homeScores/homeScores.json";
+            RestClient client = new RestClient(serviceUrl);
+            RestRequest request = new RestRequest(endpoint, Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            request.RequestFormat = DataFormat.Json;
+
+            IRestResponse response = client.Execute(request);
+
+            return Ok(SimpleJson.DeserializeObject(response.Content.Replace("<!-- SSI Error -->", "")));
+
+        }
+
+
+        // GET api/<controller>
         [Route("api/Scoreboard/usopen/2014")]
         public IHttpActionResult GetUSOpen2014()
         {

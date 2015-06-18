@@ -224,6 +224,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\chambersbay.jpg" />
+    <Content Include="images\chambersbay_rain.JPG" />
     <Content Include="images\icon_arrow_down.png" />
     <Content Include="images\icon_arrow_up.png" />
     <Content Include="images\masters.jpg" />
@@ -604,6 +606,7 @@
     <Content Include="Views\Home\BritishOpen_2014.cshtml" />
     <Content Include="Views\Home\PGAChampionship_2014.cshtml" />
     <Content Include="Views\Home\Masters_2015.cshtml" />
+    <Content Include="Views\Home\USO_2015.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -629,7 +632,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>63062</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
