@@ -279,10 +279,27 @@
             ]
         };
 
+        $scope.shaunB = {
+            'name': "Shaun Bank",
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '28237', 'tier': 'A' },
+                { 'id': '22405', 'tier': 'B' },
+                { 'id': '32012', 'tier': 'B' },
+                { 'id': '29420', 'tier': 'C' },
+                { 'id': '26596', 'tier': 'C' },
+                { 'id': '24138', 'tier': 'C' },
+                { 'id': '6522', 'tier': 'D' },
+                { 'id': '24490', 'tier': 'D' },
+                { 'id': '34431', 'tier': 'D' },
+                { 'id': '28339', 'tier': 'D' },
+                { 'id': '47990', 'tier': 'E' }
+            ]
+        };
 
 
-
-        $scope.shenanigans = [$scope.jeremyL, $scope.jeremyH, $scope.douglasB, $scope.bradR, $scope.trevorC, $scope.basilU, $scope.scottH, $scope.brianO, $scope.benjaminM, $scope.robE, $scope.carlN, $scope.jimF];
+        $scope.shenanigans = [$scope.jeremyL, $scope.jeremyH, $scope.douglasB, $scope.bradR, $scope.trevorC, $scope.basilU, $scope.scottH, $scope.brianO, $scope.benjaminM, $scope.robE, $scope.carlN, $scope.jimF, $scope.shaunB];
 
         $scope.scoresCallback = function (scores) {
             $scope.scores = scores.homeScores;
