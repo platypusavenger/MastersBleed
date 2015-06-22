@@ -66,16 +66,23 @@ namespace Scoreboard.Controllers
         [Route("api/Scoreboard/usopen/2015")]
         public IHttpActionResult GetUSOpen2015()
         {
-            string serviceUrl = "http://www.usopen.com/";
-            string endpoint = "en_US/xml/gen/homeScores/homeScores.json";
-            RestClient client = new RestClient(serviceUrl);
-            RestRequest request = new RestRequest(endpoint, Method.GET);
-            request.AddHeader("Content-Type", "application/json");
-            request.RequestFormat = DataFormat.Json;
+            //string serviceUrl = "http://www.usopen.com/";
+            //string endpoint = "en_US/xml/gen/homeScores/homeScores.json";
+            //RestClient client = new RestClient(serviceUrl);
+            //RestRequest request = new RestRequest(endpoint, Method.GET);
+            //request.AddHeader("Content-Type", "application/json");
+            //request.RequestFormat = DataFormat.Json;
 
-            IRestResponse response = client.Execute(request);
+            //IRestResponse response = client.Execute(request);
 
-            return Ok(SimpleJson.DeserializeObject(response.Content.Replace("<!-- SSI Error -->", "")));
+            //return Ok(SimpleJson.DeserializeObject(response.Content.Replace("<!-- SSI Error -->", "")));
+            string path = Path.Combine(HttpContext.Current.Request.PhysicalApplicationPath, @"App_Data\USOpen2015.json");
+            string readContents;
+            using (StreamReader streamReader = new StreamReader(path, Encoding.UTF8))
+            {
+                readContents = streamReader.ReadToEnd();
+            }
+            return Ok(SimpleJson.DeserializeObject(readContents));
 
         }
 

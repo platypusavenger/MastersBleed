@@ -308,21 +308,23 @@
             $scope.totalScore = 0;
             $scope.avgScore = 0;
 
-            $scope.cutLine = "3";
-            $scope.cutPenalty = "+6"
+            // Penalty is based on the 40th percentile score
+            var penalizedPosition = Math.ceil($scope.scores.player.length * .4);
+
+            $scope.cutLine = "5";
+            $scope.cutPenalty = "+8"
             // Add data to each player for who has picked them
             for (var i = 0; i < $scope.scores.player.length; i++) {
-                // Masters:  Top ?? Advance
+
                 var position = $scope.scores.player[i].pos;
                 if (position.substring(0, 1) == 'T')
                     position = parseInt(position.substring(1, position.length));
 
-                // Masters:  Cut = +3 or worse
-                //if (position <= 70)
-                //    $scope.cutLine = $scope.scores.player[i].score;
+                // US Open :  Cut > 60th 
+                //if (position <= 60)
+                //    $scope.cutLine = $scope.getScoreNumber($scope.scores.player[i].score);
 
-                // Masters:  80th Percentile is position 78
-                //if (position > 77 && $scope.cutPenalty == '')
+                //if (position > penalizedPosition && $scope.cutPenalty == '')
                 //    $scope.cutPenalty = $scope.scores.player[i].score;
 
                 $scope.scores.player[i].pickedBy = "";
@@ -340,12 +342,12 @@
                 if (position.substring(0, 1) == 'T')
                     position = parseInt(position.substring(1, position.length));
             
-                if (position <= 50)
+                if (position <= 60)
                     $scope.scores.player[i].cutPenalty = '';
                 else
                     $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
 
-                if (position == 'MC' || $scope.scores.player[i].thru == 'WD')
+                if (position == 'MC' || position == 'WD' || $scope.scores.player[i].thru == 'WD')
                     $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
                 else
                     $scope.scores.player[i].cutPenalty = '';
