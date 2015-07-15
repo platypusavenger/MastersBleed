@@ -26,12 +26,12 @@ namespace Scoreboard.Controllers
         {
             ViewBag.Message = "Current Scoreboard";
 
-            return RedirectToAction("USO_2015", "Home");
+            return RedirectToAction("BritishOpen_2015", "Home");
         }
 
-        public ActionResult USO_2015()
+        public ActionResult BritishOpen_2015()
         {
-            ViewBag.Messsage = "US Open Scorebaord";
+            ViewBag.Messsage = "The Open Championship Scoreboard";
 
             return View();
         }
