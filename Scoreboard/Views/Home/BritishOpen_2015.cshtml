@@ -142,25 +142,6 @@
             ]
         };
 
-        $scope.shaunB = {
-            'name': 'Shaun Bank',
-            'score': 0,
-            'expanded': true,
-            'picks': [
-                { 'id': '128690', 'tier': 'A' },
-                { 'id': '8929', 'tier': 'B' },
-                { 'id': '47568', 'tier': 'B' },
-                { 'id': '6569', 'tier': 'C' },
-                { 'id': '7175', 'tier': 'C' },
-                { 'id': '134628', 'tier': 'C' },
-                { 'id': '8378', 'tier': 'D' },
-                { 'id': '128682', 'tier': 'D' },
-                { 'id': '8969', 'tier': 'D' },
-                { 'id': '6689', 'tier': 'D' },
-                { 'id': '9246', 'tier': 'E' }
-            ]
-        };
-
         $scope.trevorC = {
             'name': 'Trevor Corcoran',
             'score': 0,
@@ -187,7 +168,7 @@
             'picks': [
                 { 'id': '128690', 'tier': 'A' },
                 { 'id': '100604', 'tier': 'B' },
-                { 'id': '14762', 'tier': 'B' },
+                { 'id': '6575', 'tier': 'B' },
                 { 'id': '98494', 'tier': 'C' },
                 { 'id': '7230', 'tier': 'C' },
                 { 'id': '131385', 'tier': 'C' },
@@ -441,8 +422,12 @@
                 newPlayer.thru = scores[i].Hole;
                 if (newPlayer.thru.indexOf(":") != -1) {
                     var hh = newPlayer.thru.substring(0, 2) - 5;
+                    hh = "" + hh;
                     var mm = newPlayer.thru.substring(3);
-                    newPlayer.thru = "".concat(hh).concat(":").concat(mm);
+                    if (hh.length == 1) {
+                       hh = "0" + hh;
+                    }
+                    newPlayer.thru = hh.concat(":").concat(mm);
                 }
                 newPlayer.order = scores[i].R1 + "|" + scores[i].R2 + "|" + scores[i].R3 + "|" + scores[i].R4;
                 newPlayer.live = "f";
