@@ -120,7 +120,7 @@
                             <td class="col-md-2">{{pick.score}}</td>
                             <td class="col-md-2">{{pick.today}}</td>
                             <td class="col-md-2">{{pick.thru}}</td>
-                            <td>{{pick.cutPenalty}}</td>
+                            <td ng-hide="!cutPenalty">{{pick.cutPenalty}}</td>
                         </tr>
                     </table>
                 </li>

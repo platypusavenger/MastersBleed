@@ -63,6 +63,12 @@ namespace Scoreboard.Controllers
 
             return View();
         }
+        public ActionResult USO_2015()
+        {
+            ViewBag.Messsage = "US Open Scorebaord";
+
+            return View();
+        }
 
         public ActionResult PGAChampionship_2014()
         {
