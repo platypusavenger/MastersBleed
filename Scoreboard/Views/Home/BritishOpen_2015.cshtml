@@ -21,7 +21,7 @@
         },
         backgrounds: {
             default: 'theopen2015.jpg',
-            raining: 'theopen2015.png'
+            raining: 'theopen2015raining.jpg'
         }
     };
 
@@ -299,8 +299,8 @@
         $scope.scoresCallback = function (scores) {
             var fixedScores = scrubOpenData(scores);
             $scope.scores = fixedScores.homeScores;
-            $scope.cutLine = '';
-            $scope.cutPenalty = '';
+            $scope.cutLine = 'E';
+            $scope.cutPenalty = '+2';
             $scope.totalScore = 0;
             $scope.avgScore = 0;
 
@@ -330,8 +330,8 @@
 
             // Add a projected cut penalty
             // British open replaces rank with CUT -- fix it!
-            $scope.cutLine = 0;
-            $scope.cutPenalty = 0;
+            $scope.cutLine = 'E';
+            $scope.cutPenalty = '+2';
             for (var i = 0; i < $scope.scores.player.length; i++) {
                 var position = $scope.scores.player[i].pos;
                 if (position.substring(0, 1) == 'T')
