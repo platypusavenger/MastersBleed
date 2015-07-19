@@ -319,6 +319,7 @@
                 //if (position > 123 && $scope.cutPenalty == '')
                 //    $scope.cutPenalty = $scope.scores.player[i].score;
 
+               
                 $scope.scores.player[i].pickedBy = "";
                 $scope.scores.player[i].scoreKey = $scope.getScoreNumber($scope.scores.player[i].score);
                 $scope.scores.player[i].todayKey = $scope.getScoreNumber($scope.scores.player[i].today);
@@ -337,8 +338,13 @@
                 if (position.substring(0, 1) == 'T')
                     position = parseInt(position.substring(1, position.length));
 
-                if (!$scope.scores.player[i].isCut)
+                if (!$scope.scores.player[i].isCut) {
                     $scope.scores.player[i].cutPenalty = '';
+                    //add bonus for winner
+                    if (position == 1) {
+                        $scope.scores.player[i].cutPenalty = (2 * $scope.getScoreNumber($scope.cutPenalty)) * -1
+                    }
+                }
                 else
                     $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
                 $scope.totalScore += $scope.getScoreNumber($scope.scores.player[i].score);
