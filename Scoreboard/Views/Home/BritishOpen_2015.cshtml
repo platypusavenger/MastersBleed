@@ -337,7 +337,7 @@
                 if (position.substring(0, 1) == 'T')
                     position = parseInt(position.substring(1, position.length));
 
-                if (position <= 70)
+                if (!$scope.scores.player[i].isCut)
                     $scope.scores.player[i].cutPenalty = '';
                 else
                     $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
@@ -408,9 +408,11 @@
             var lastPos = scores[0].Position.SortValue;
             for (var i = 0; i < scores.length; i++) {
                 var newPlayer = {};
+                newPlayer.isCut = false;
                 newPlayer.pos = scores[i].Position.DisplayValue;
                 if (newPlayer.pos == 'CUT') {
                     newPlayer.pos = "" + scores[i].Position.SortValue;
+                    newPlayer.isCut = true;
                 }
 
                 newPlayer.dName = scores[i].Name;
