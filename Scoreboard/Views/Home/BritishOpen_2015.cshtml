@@ -338,10 +338,11 @@
                 if (position.substring(0, 1) == 'T')
                     position = parseInt(position.substring(1, position.length));
 
+                //console.log($scope.scores.player[i]);
                 if (!$scope.scores.player[i].isCut) {
                     $scope.scores.player[i].cutPenalty = '';
                     //add bonus for winner
-                    if (position == 1) {
+                    if ($scope.scores.player[i].id == '15622') {
                         $scope.scores.player[i].cutPenalty = (2 * $scope.getScoreNumber($scope.cutPenalty)) * -1
                     }
                 }

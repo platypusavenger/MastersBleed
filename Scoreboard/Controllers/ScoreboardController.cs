@@ -138,45 +138,45 @@ namespace Scoreboard.Controllers
         [Route("api/Scoreboard/britishopen/2015")]
         public IHttpActionResult GetBritishOpen2015()
         {
-            string serviceUrl = "http://www.theopen.com/";
-            string endpoint = "api/traditional";
-            RestClient client = new RestClient(serviceUrl);
-            RestRequest request = new RestRequest(endpoint, Method.GET);
-            request.AddHeader("Content-Type", "application/json");
-            request.RequestFormat = DataFormat.Json;
+            //string serviceUrl = "http://www.theopen.com/";
+            //string endpoint = "api/traditional";
+            //RestClient client = new RestClient(serviceUrl);
+            //RestRequest request = new RestRequest(endpoint, Method.GET);
+            //request.AddHeader("Content-Type", "application/json");
+            //request.RequestFormat = DataFormat.Json;
 
-            IRestResponse response = client.Execute(request);
+            //IRestResponse response = client.Execute(request);
 
-            return Ok(SimpleJson.DeserializeObject(response.Content.Replace("<!-- SSI Error -->", "")));
-            //string path = Path.Combine(HttpContext.Current.Request.PhysicalApplicationPath, @"App_Data\BritishOpen2014.json");
-            //string readContents;
-            //using (StreamReader streamReader = new StreamReader(path, Encoding.UTF8))
-            //{
-            //    readContents = streamReader.ReadToEnd();
-            //}
-            //return Ok(SimpleJson.DeserializeObject(readContents));
+            //return Ok(SimpleJson.DeserializeObject(response.Content.Replace("<!-- SSI Error -->", "")));
+            string path = Path.Combine(HttpContext.Current.Request.PhysicalApplicationPath, @"App_Data\BritishOpen2015.json");
+            string readContents;
+            using (StreamReader streamReader = new StreamReader(path, Encoding.UTF8))
+            {
+                readContents = streamReader.ReadToEnd();
+            }
+            return Ok(SimpleJson.DeserializeObject(readContents));
         }
 
         [Route("api/Scoreboard/britishopen/2015/tournamentinfo")]
         public IHttpActionResult GetBritishOpenInfo2015()
         {
-            string serviceUrl = "http://www.theopen.com/";
-            string endpoint = "api/championshipStatus";
-            RestClient client = new RestClient(serviceUrl);
-            RestRequest request = new RestRequest(endpoint, Method.GET);
-            request.AddHeader("Content-Type", "application/json");
-            request.RequestFormat = DataFormat.Json;
+            //string serviceUrl = "http://www.theopen.com/";
+            //string endpoint = "api/championshipStatus";
+            //RestClient client = new RestClient(serviceUrl);
+            //RestRequest request = new RestRequest(endpoint, Method.GET);
+            //request.AddHeader("Content-Type", "application/json");
+            //request.RequestFormat = DataFormat.Json;
 
-            IRestResponse response = client.Execute(request);
+            //IRestResponse response = client.Execute(request);
 
-            return Ok(SimpleJson.DeserializeObject(response.Content.Replace("<!-- SSI Error -->", "")));
-            //string path = Path.Combine(HttpContext.Current.Request.PhysicalApplicationPath, @"App_Data\BritishOpen2014.json");
-            //string readContents;
-            //using (StreamReader streamReader = new StreamReader(path, Encoding.UTF8))
-            //{
-            //    readContents = streamReader.ReadToEnd();
-            //}
-            //return Ok(SimpleJson.DeserializeObject(readContents));
+            //return Ok(SimpleJson.DeserializeObject(response.Content.Replace("<!-- SSI Error -->", "")));
+            string path = Path.Combine(HttpContext.Current.Request.PhysicalApplicationPath, @"App_Data\BritishOpenStatus2015.json");
+            string readContents;
+            using (StreamReader streamReader = new StreamReader(path, Encoding.UTF8))
+            {
+                readContents = streamReader.ReadToEnd();
+            }
+            return Ok(SimpleJson.DeserializeObject(readContents));
         }
 
         // GET api/<controller>
