@@ -202,5 +202,29 @@ namespace Scoreboard.Controllers
             }
             return Ok(SimpleJson.DeserializeObject(readContents));
         }
+
+        // GET api/<controller>
+        [Route("api/Scoreboard/pgachampionship/2015")]
+        public IHttpActionResult GetPGAChampionship2015()
+        {
+            string serviceUrl = "http://data.pga.com/";
+            string endpoint = "jsonp/event/pgachampionship/2015/leaderboard/json/leaderboard.json?callback=pga_leaderboardLoaded";
+            RestClient client = new RestClient(serviceUrl);
+            RestRequest request = new RestRequest(endpoint, Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            request.RequestFormat = DataFormat.Json;
+
+            IRestResponse response = client.Execute(request);
+            String content = response.Content.Replace("pga_leaderboardLoaded(", "");
+            content = content.Replace(");", "");
+            return Ok(SimpleJson.DeserializeObject(content));
+            //string path = Path.Combine(HttpContext.Current.Request.PhysicalApplicationPath, @"App_Data\PGAChampionship2015.json");
+            //string readContents;
+            //using (StreamReader streamReader = new StreamReader(path, Encoding.UTF8))
+            //{
+            //    readContents = streamReader.ReadToEnd();
+            //}
+            //return Ok(SimpleJson.DeserializeObject(readContents));
+        }
     }
 }
