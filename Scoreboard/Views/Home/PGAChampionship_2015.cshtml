@@ -409,7 +409,7 @@
                 //    $scope.scores.player[i].cutPenalty = '';
                 //else
                 //    $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
-                if (position == 'CUT' || $scope.scores.player[i].thru == 'WD')
+                if (position == 'CUT' || position == 'WD')
                     $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
                 else {
                     $scope.scores.player[i].cutPenalty = '';
