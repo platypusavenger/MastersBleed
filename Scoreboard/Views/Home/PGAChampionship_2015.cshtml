@@ -44,7 +44,7 @@
         $scope.cutPenalty = '';
         $scope.totalScore = 0;
         $scope.avgScore = 0;
-        $scope.showPenalty = false;
+        $scope.showPenalty = true;
 
         $scope.scores = {};
         $scope.scoreCache = {};
@@ -362,14 +362,26 @@
             $scope.totalScore = 0;
             $scope.avgScore = 0;
 
-            $scope.cutLine = '';
-            //$scope.cutPenalty = "0";
+            $scope.cutLine = '+2';
+            $scope.cutPenalty = "+4";
             // Add data to each player for who has picked them
             for (var i = 0; i < $scope.scores.player.length; i++) {
                 // PGA Championship:  Top 70 Advance
                 var position = $scope.scores.player[i].pos;
                 if (position.substring(0, 1) == 'T')
                     position = parseInt(position.substring(1, position.length));
+                //console.log($scope.scores.player[i]);
+                if (!$scope.scores.player[i].isCut) {
+                    $scope.scores.player[i].cutPenalty = '';
+                    //add bonus for winner
+                    if (position == 1) {
+                        $scope.scores.player[i].cutPenalty = (2 * $scope.getScoreNumber($scope.cutPenalty)) * -1
+                        //found someone in first
+                        console.log("Found it! " + JSON.stringify($scope.scores.player[i]));
+                    }
+                }
+                else
+                    $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
 
                 //if (position <= 70)
                 //    $scope.cutLine = $scope.scores.player[i].score;
@@ -390,8 +402,8 @@
             // Add a projected cut penalty
             for (var i = 0; i < $scope.scores.player.length; i++) {
                 var position = $scope.scores.player[i].pos;
-                //if (position.substring(0, 1) == 'T')
-                //    position = parseInt(position.substring(1, position.length));
+                if (position.substring(0, 1) == 'T')
+                    position = parseInt(position.substring(1, position.length));
             
                 //if (position <= 70)
                 //    $scope.scores.player[i].cutPenalty = '';
@@ -399,8 +411,15 @@
                 //    $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
                 if (position == 'CUT' || $scope.scores.player[i].thru == 'WD')
                     $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
-                else
+                else {
                     $scope.scores.player[i].cutPenalty = '';
+                    //add bonus for winner
+                    if (position == 1) {
+                        $scope.scores.player[i].cutPenalty = (2 * $scope.getScoreNumber($scope.cutPenalty)) * -1
+                        //found someone in first
+                        console.log("Found it! " + JSON.stringify($scope.scores.player[i]));
+                    }
+                }
 
                 $scope.totalScore += $scope.getScoreNumber($scope.scores.player[i].score);
             }
@@ -423,9 +442,8 @@
                     currentPlayer.scoreKey = $scope.getScoreNumber(info.score);
                     currentPlayer.cutPenalty = info.cutPenalty;
                     if (info.cutPenalty != '') {
-                        //currentPerson.cutPenalty += $scope.getScoreNumber(info.cutPenalty);
+                        currentPerson.cutPenalty += $scope.getScoreNumber(info.cutPenalty);
                         currentPerson.cutPlayers += 1;
-                        currentPerson.cutPenalty += currentPerson.cutPlayers;
                     }
                     var todayString = 'E';
                     if (currentPlayer.today == 'E' || currentPlayer.today.substring(0, 1) == '+' || currentPlayer.today.substring(0, 1) == '-') {
