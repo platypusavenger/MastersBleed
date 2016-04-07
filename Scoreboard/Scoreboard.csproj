@@ -228,9 +228,9 @@
     <Content Include="images\chambersbay_rain.JPG" />
     <Content Include="images\icon_arrow_down.png" />
     <Content Include="images\icon_arrow_up.png" />
+    <Content Include="images\masters-raining.jpg" />
     <Content Include="images\masters.jpg" />
     <Content Include="images\masters_logo.png" />
-    <Content Include="images\masters_raining.png" />
     <Content Include="images\pga.jpg" />
     <Content Include="images\pga_logo.png" />
     <Content Include="images\pga_raining.jpg" />
