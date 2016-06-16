@@ -26,7 +26,7 @@ namespace Scoreboard.Controllers
         {
             ViewBag.Message = "Current Scoreboard";
 
-            return RedirectToAction("Masters_2016", "Home");
+            return RedirectToAction("USO_2016", "Home");
         }
 
         public ActionResult PGAChampionship_2015()
@@ -83,6 +83,12 @@ namespace Scoreboard.Controllers
             return View();
         }
 
+        public ActionResult USO_2016()
+        {
+            ViewBag.Messsage = "US Open Scorebaord";
+
+            return View();
+        }
         public ActionResult PGAChampionship_2014()
         {
             ViewBag.Message = "PGA Championship Scoreboard";
