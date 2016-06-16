@@ -257,7 +257,101 @@
             ]
         };
 
-        $scope.shenanigans = [$scope.christian, $scope.brad, $scope.briano, $scope.shanks, $scope.doug, $scope.fancher, $scope.ryanb, $scope.trevor, $scope.jeremyL, $scope.robe, $scope.craig];
+        $scope.basil = {
+            'name': 'Basil Udoudoh',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '28089', 'tier': 'A' },
+                { 'id': '22405', 'tier': 'B' },
+                { 'id': '21528', 'tier': 'B' },
+                { 'id': '27141', 'tier': 'C' },
+                { 'id': '40098', 'tier': 'C' },
+                { 'id': '29478', 'tier': 'C' },
+                { 'id': '35314', 'tier': 'D' },
+                { 'id': '34431', 'tier': 'D' },
+                { 'id': '28258', 'tier': 'D' },
+                { 'id': '25818', 'tier': 'D' },
+                { 'id': '30957', 'tier': 'E' }
+            ]
+        };
+
+        $scope.benji = {
+            'name': 'Benjmain Mokotoff',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '28237', 'tier': 'A' },
+                { 'id': '24502', 'tier': 'B' },
+                { 'id': '32139', 'tier': 'B' },
+                { 'id': '40098', 'tier': 'C' },
+                { 'id': '33122', 'tier': 'C' },
+                { 'id': '25686', 'tier': 'C' },
+                { 'id': '29454', 'tier': 'D' },
+                { 'id': '36699', 'tier': 'D' },
+                { 'id': '6522', 'tier': 'D' },
+                { 'id': '22986', 'tier': 'D' },
+                { 'id': '46046', 'tier': 'E' }
+            ]
+        };
+
+        $scope.banks = {
+            'name': 'Shaun Bank',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '28089', 'tier': 'A' },
+                { 'id': '22405', 'tier': 'B' },
+                { 'id': '32839', 'tier': 'B' },
+                { 'id': '24024', 'tier': 'C' },
+                { 'id': '32366', 'tier': 'C' },
+                { 'id': '47959', 'tier': 'C' },
+                { 'id': '31420', 'tier': 'D' },
+                { 'id': '30978', 'tier': 'D' },
+                { 'id': '30944', 'tier': 'D' },
+                { 'id': '24457', 'tier': 'D' },
+                { 'id': '27466', 'tier': 'E' }
+            ]
+        };
+
+        $scope.donnie = {
+            'name': 'Donnie Mattingly',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '34046', 'tier': 'A' },
+                { 'id': '24502', 'tier': 'B' },
+                { 'id': '25804', 'tier': 'B' },
+                { 'id': '26331', 'tier': 'C' },
+                { 'id': '24024', 'tier': 'C' },
+                { 'id': '33448', 'tier': 'C' },
+                { 'id': '27349', 'tier': 'D' },
+                { 'id': '32448', 'tier': 'D' },
+                { 'id': '34431', 'tier': 'D' },
+                { 'id': '20848', 'tier': 'D' },
+                { 'id': '49964', 'tier': 'E' }
+            ]
+        };
+
+        $scope.jhahn = {
+            'name': 'Jeremy Hahn',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '28089', 'tier': 'A' },
+                { 'id': '24502', 'tier': 'B' },
+                { 'id': '23108', 'tier': 'B' },
+                { 'id': '26331', 'tier': 'C' },
+                { 'id': '27141', 'tier': 'C' },
+                { 'id': '32366', 'tier': 'C' },
+                { 'id': '27349', 'tier': 'D' },
+                { 'id': '29454', 'tier': 'D' },
+                { 'id': '20157', 'tier': 'D' },
+                { 'id': '31202', 'tier': 'D' },
+                { 'id': '31557', 'tier': 'E' }
+            ]
+        };
+        $scope.shenanigans = [$scope.jhahn, $scope.donnie, $scope.banks, $scope.benji, $scope.basil, $scope.christian, $scope.brad, $scope.briano, $scope.shanks, $scope.doug, $scope.fancher, $scope.ryanb, $scope.trevor, $scope.jeremyL, $scope.robe, $scope.craig];
 
         $scope.scoresCallback = function (scores) {
             $scope.scores = scores.homeScores;
