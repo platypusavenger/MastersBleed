@@ -236,6 +236,7 @@
     <Content Include="images\pga_logo.png" />
     <Content Include="images\pga_raining.jpg" />
     <Content Include="images\pga_raining.png" />
+    <Content Include="images\royal_troon.jpg" />
     <Content Include="images\theopen.jpg" />
     <Content Include="images\theopen2015.jpg" />
     <Content Include="images\theopen2015raining.jpg" />
@@ -621,6 +622,7 @@
     <Content Include="Views\Home\PGAChampionship_2015.cshtml" />
     <Content Include="Views\Home\Masters_2016.cshtml" />
     <Content Include="Views\Home\USO_2016.cshtml" />
+    <Content Include="Views\Home\BritishOpen_2016.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />

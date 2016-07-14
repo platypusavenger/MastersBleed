@@ -418,6 +418,7 @@
                 for (var j = 0; j < currentPerson.picks.length; j++) {
                     var currentPlayer = currentPerson.picks[j];
                     var info = $scope.matchPlayerInfo(currentPlayer.id, currentPerson.name);
+                    currentPlayer.pos = info.pos;
                     currentPlayer.name = info.fName + ' ' + info.lName;
                     currentPlayer.score = info.score;
                     currentPlayer.today = info.today;
@@ -436,6 +437,9 @@
                     if (currentPlayer.score == 'E' || currentPlayer.score.substring(0, 1) == '+' || currentPlayer.score.substring(0, 1) == '-') {
                         currentPlayer.todayKey = $scope.getScoreNumber(todayString);
                         currentPerson.score += $scope.getScoreNumber(info.score);
+                        if (currentPlayer.pos == "WD") {
+                            currentPlayer.score = 'WD';
+                        }
                         currentPerson.base += (currentPlayer.scoreKey - currentPlayer.todayKey);
                     }
 

@@ -74,11 +74,11 @@
             'picks': [
                 { 'id': '28089', 'tier': 'A' },
                 { 'id': '30925', 'tier': 'B' },
-                { 'id': '22405', 'tier': 'B' },
-                { 'id': '24024', 'tier': 'C' },
+                { 'id': '1810', 'tier': 'B' },
                 { 'id': '29478', 'tier': 'C' },
+                { 'id': '33122', 'tier': 'C' },
                 { 'id': '40026', 'tier': 'C' },
-                { 'id': '29454', 'tier': 'D' },
+                { 'id': '6522', 'tier': 'D' },
                 { 'id': '36699', 'tier': 'D' },
                 { 'id': '20848', 'tier': 'D' },
                 { 'id': '31202', 'tier': 'D' },
@@ -355,13 +355,16 @@
 
         $scope.scoresCallback = function (scores) {
             $scope.scores = scores.homeScores;
-            $scope.cutLine = '';
-            $scope.cutPenalty = '';
+            $scope.cutLine = '+7';
+            $scope.cutPenalty = '+9';
             $scope.totalScore = 0;
             $scope.avgScore = 0;
 
             // Penalty is based on the 40th percentile score
             var penalizedPosition = Math.ceil($scope.scores.player.length * .4);
+
+            $scope.cutLine = "7";
+            $scope.cutPenalty = "+9"
 
             //$scope.cutLine = "5";
             //$scope.cutPenalty = "+8"
@@ -394,13 +397,11 @@
                 if (position.substring(0, 1) == 'T')
                     position = parseInt(position.substring(1, position.length));
             
-                if (position <= 60)
-                    $scope.scores.player[i].cutPenalty = '';
-                else
-                    $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
-
                 if (position == 'MC' || position == 'WD' || $scope.scores.player[i].thru == 'WD')
                     $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
+                else if (position == 1) {
+                    $scope.scores.player[i].cutPenalty = (2 * $scope.getScoreNumber($scope.cutPenalty)) * -1
+                }
                 else
                     $scope.scores.player[i].cutPenalty = '';
 
@@ -418,17 +419,23 @@
                 for (var j = 0; j < currentPerson.picks.length; j++) {
                     var currentPlayer = currentPerson.picks[j];
                     var info = $scope.matchPlayerInfo(currentPlayer.id, currentPerson.name);
+                    currentPlayer.pos = info.pos;
                     currentPlayer.name = info.fName + ' ' + info.lName;
                     currentPlayer.score = info.score;
                     currentPlayer.today = info.today;
                     currentPlayer.thru = info.thru;
                     currentPlayer.status = info.status;
+                    currentPlayer.cutPenalty = info.cutPenalty;
                     currentPlayer.scoreKey = $scope.getScoreNumber(info.score);
                     if (info.cutPenalty != '') {
-                        currentPerson.cutPenalty += $scope.getScoreNumber(info.cutPenalty);
+                        currentPerson.cutPenalty += info.cutPenalty;
                         currentPerson.cutPlayers += 1;
                     }
                     var todayString = 'E';
+                    if (currentPlayer.pos == 'WD') {
+                        currentPlayer.thru = 'WD';
+                        currentPlayer.today = 'WD';
+                    }
                     if (currentPlayer.today == 'E' || currentPlayer.today.substring(0, 1) == '+' || currentPlayer.today.substring(0, 1) == '-') {
                         todayString = currentPlayer.today;
                     }
