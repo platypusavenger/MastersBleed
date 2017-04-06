@@ -50,7 +50,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <!--@Html.ActionLink("Current Scoreboard", "BritishOpen_2016", "Home", null, new { @class = "navbar-brand" })-->
+                <!--@Html.ActionLink("Current Scoreboard", "Masters_2017", "Home", null, new { @class = "navbar-brand" })-->
             </div>
             <div class="navbar-collapse collapse pad0">
                 <ul class="nav navbar-nav">
@@ -107,7 +107,7 @@
 
             <ul ng-hide="showPlayerRankings">
                 <li ng-repeat="person in shenanigans | orderBy:personPredicate:personReverse" style="list-style:none">
-                    <div class="clickable" ng-click="person.expanded = !person.expanded"><span class="col-md-2">{{person.name}}</span><span class="col-md-2">{{person.score}}</span><span class="col-md-2">({{getDelta(person)}} today)</span><span ng-hide="!cutPenalty">({{person.cutPenalty}} Penalty)</span><br/></div>
+                    <div class="clickable" ng-click="person.expanded = !person.expanded"><span class="col-md-3">{{person.name}}</span><span class="col-md-2">{{person.score}}</span><span class="col-md-2">({{getDelta(person)}} today)</span><span ng-hide="!cutPenalty">({{person.cutPenalty}} Penalty)</span><br/></div>
                     <table ng-show="person.expanded" class="submission_rankings">
                         <tr>
                             <td class="col-md-1"></td>
@@ -121,7 +121,7 @@
                         <tr ng-repeat="pick in person.picks | orderBy:playerPredicate:playerReverse" ng-class="pick.status">
                             <td class="col-md-1"></td>
                             <td>{{pick.tier}}</td>
-                            <td style="width: 40%;">{{pick.name}}</td>
+                            <td class="col-md-3">{{pick.name}}</td>
                             <td class="col-md-2">{{pick.score}}</td>
                             <td class="col-md-2">{{pick.today}}</td>
                             <td class="col-md-2">{{pick.thru}}</td>
