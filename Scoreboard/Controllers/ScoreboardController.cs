@@ -17,7 +17,7 @@ namespace Scoreboard.Controllers
         public IHttpActionResult GetMasters2017()
         {
             string serviceUrl = "http://www.masters.com/";
-            string endpoint = "en_US/xml/gen/homeScores/homeScores.json";
+            string endpoint = "en_US/scores/feeds/scores.json";
             RestClient client = new RestClient(serviceUrl);
             RestRequest request = new RestRequest(endpoint, Method.GET);
             request.AddHeader("Content-Type", "application/json");
