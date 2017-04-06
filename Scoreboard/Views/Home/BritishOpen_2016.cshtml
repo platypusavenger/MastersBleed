@@ -38,8 +38,8 @@
         $scope.pickReverse = false;
         $scope.playerPredicate = 'scoreKey';
         $scope.playerReverse = false;
-        $scope.cutLine = '';
-        $scope.cutPenalty = '';
+        $scope.cutLine = '+4';
+        $scope.cutPenalty = '+6';
         $scope.totalScore = 0;
         $scope.avgScore = 0;
         $scope.showPenalty = true;
@@ -243,8 +243,8 @@
         $scope.scoresCallback = function (scores) {
             var fixedScores = scrubOpenData(scores);
             $scope.scores = fixedScores.homeScores;
-            $scope.cutLine = '';
-            $scope.cutPenalty = '';
+            $scope.cutLine = '+4';
+            $scope.cutPenalty = '+6';
             $scope.totalScore = 0;
             $scope.avgScore = 0;
 
@@ -275,8 +275,8 @@
 
             // Add a projected cut penalty
             // British open replaces rank with CUT -- fix it!
-            $scope.cutLine = '';
-            $scope.cutPenalty = '';
+            $scope.cutLine = '+4';
+            $scope.cutPenalty = '+6';
             for (var i = 0; i < $scope.scores.player.length; i++) {
                 var position = $scope.scores.player[i].pos;
                 if (position.substring(0, 1) == 'T')
@@ -289,6 +289,9 @@
                     //if ($scope.scores.player[i].id == '15622') {
                     //    $scope.scores.player[i].cutPenalty = (2 * $scope.getScoreNumber($scope.cutPenalty)) * -1
                     //}
+                    if (position == 1) {
+                        $scope.scores.player[i].cutPenalty = (2 * $scope.getScoreNumber($scope.cutPenalty)) * -1;
+                    }
                 }
                 else
                     $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
@@ -361,7 +364,7 @@
                 var newPlayer = {};
                 newPlayer.isCut = false;
                 newPlayer.pos = scores[i].Position.DisplayValue;
-                if (newPlayer.pos == 'CUT') {
+                if (newPlayer.pos == 'CUT' || newPlayer.pos == 'WD') {
                     newPlayer.pos = "" + scores[i].Position.SortValue;
                     newPlayer.isCut = true;
                 }
