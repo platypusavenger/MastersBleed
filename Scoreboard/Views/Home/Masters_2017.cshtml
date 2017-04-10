@@ -38,8 +38,8 @@
         $scope.pickReverse = false;
         $scope.playerPredicate = 'scoreKey';
         $scope.playerReverse = false;
-        $scope.cutLine = 'E';
-        $scope.cutPenalty = 'E';
+        $scope.cutLine = '6';
+        $scope.cutPenalty = '7';
         $scope.totalScore = 0;
         $scope.avgScore = 0;
         $scope.showPenalty = true;
@@ -88,7 +88,7 @@
             'score': 0,
             'expanded': true,
             'picks': [
-                { 'id': '30925', 'tier': 'A' },
+                { 'id': '28237', 'tier': 'A' },
                 { 'id': '46970', 'tier': 'B' },
                 { 'id': '22405', 'tier': 'B' },
                 { 'id': '40026', 'tier': 'C' },
@@ -142,7 +142,7 @@
             'score': 0,
             'expanded': true,
             'picks': [
-                { 'id': '30925', 'tier': 'A' },
+                { 'id': '28237', 'tier': 'A' },
                 { 'id': '28089', 'tier': 'B' },
                 { 'id': '21528', 'tier': 'B' },
                 { 'id': '34360', 'tier': 'C' },
@@ -250,25 +250,7 @@
             'score': 0,
             'expanded': true,
             'picks': [
-                { 'id': '30925', 'tier': 'A' },
-                { 'id': '28089', 'tier': 'B' },
-                { 'id': '24502', 'tier': 'B' },
-                { 'id': '26331', 'tier': 'C' },
-                { 'id': '33293', 'tier': 'C' },
-                { 'id': '29478', 'tier': 'C' },
-                { 'id': '25686', 'tier': 'D' },
-                { 'id': '10809', 'tier': 'D' },
-                { 'id': '21498', 'tier': 'D' },
-                { 'id': '25818', 'tier': 'D' }
-            ]
-        };
-
-        $scope.benjamin = {
-            'name': 'Benjamin Mokotoff',
-            'score': 0,
-            'expanded': true,
-            'picks': [
-                { 'id': '30925', 'tier': 'A' },
+                { 'id': '28237', 'tier': 'A' },
                 { 'id': '28089', 'tier': 'B' },
                 { 'id': '24502', 'tier': 'B' },
                 { 'id': '26331', 'tier': 'C' },
@@ -286,7 +268,7 @@
             'score': 0,
             'expanded': true,
             'picks': [
-                { 'id': '30925', 'tier': 'A' },
+                { 'id': '28237', 'tier': 'A' },
                 { 'id': '32102', 'tier': 'B' },
                 { 'id': '25804', 'tier': 'B' },
                 { 'id': '26851', 'tier': 'C' },
@@ -302,8 +284,8 @@
 
         $scope.scoresCallback = function (scores) {
             $scope.scores = scores.data;
-            $scope.cutLine = scores.cutLine;
-            $scope.cutPenalty = '';
+            $scope.cutLine = scores.data.cutLine;
+            $scope.cutPenalty = '7';
             $scope.totalScore = 0;
             $scope.avgScore = 0;
 
@@ -313,7 +295,7 @@
                 var position = $scope.scores.player[i].pos;
                 if (position.substring(0, 1) == 'T')
                     position = parseInt(position.substring(1, position.length));
-                // Masters:  Cut = +3 or worse
+                // Masters:  Cut = +7 or worse
                 //if (position <= 70)
                 //    $scope.cutLine = $scope.scores.player[i].score;
 
@@ -340,7 +322,7 @@
                 if (position.substring(0, 1) == 'T')
                     position = parseInt(position.substring(1, position.length));
             
-                if (position == 'MC' || $scope.scores.player[i].thru == 'WD') {
+                if (position == 'MC' || $scope.scores.player[i].thru == 'WD' || position === "") {
                     $scope.scores.player[i].cutPenalty = 2 * $scope.cutPenalty;
                 }
                 else if (position == 1) {

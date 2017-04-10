@@ -343,6 +343,7 @@
     <Content Include="App_Data\BritishOpenStatus2015.json" />
     <Content Include="App_Data\PGAChampionship2015.json" />
     <Content Include="App_Data\Masters2016.json" />
+    <Content Include="App_Data\Masters2017.json" />
     <None Include="Properties\PublishProfiles\BenchServer.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\i18n\angular-locale_af-na.js" />
