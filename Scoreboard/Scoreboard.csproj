@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -625,6 +626,7 @@
     <Content Include="Views\Home\USO_2016.cshtml" />
     <Content Include="Views\Home\BritishOpen_2016.cshtml" />
     <Content Include="Views\Home\Masters_2017.cshtml" />
+    <Content Include="Views\Home\USO_2017.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
