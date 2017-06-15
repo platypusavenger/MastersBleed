@@ -227,6 +227,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="images\chambersbay.jpg" />
     <Content Include="images\chambersbay_rain.JPG" />
+    <Content Include="images\erin_hills.jpg" />
+    <Content Include="images\erin_hills_raining.jpg" />
     <Content Include="images\icon_arrow_down.png" />
     <Content Include="images\icon_arrow_up.png" />
     <Content Include="images\masters-raining.jpg" />

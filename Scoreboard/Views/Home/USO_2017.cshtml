@@ -21,8 +21,8 @@
             lng: '-79.828234'
         },
         backgrounds: {
-            default: 'oakmont.jpg',
-            raining: 'oakmont.jpg'
+            default: 'erin_hills.jpg',
+            raining: 'erin_hills_raining.jpg'
         }
     };
 
@@ -255,17 +255,20 @@
                 newPlayer.today = scores.standings[i].toParToday.displayValue;
                 newPlayer.thru = scores.standings[i].holesThrough.displayValue;
                 //time zones!
-                /*
                 if (newPlayer.thru.indexOf(":") != -1) {
-                    var hh = newPlayer.thru.substring(0, 2) - 5;
+                    var hh = parseInt(newPlayer.thru.split(":")[0]) + 1;
+                    if (hh == 0)
+                        hh = 12;
+                    if (hh == 13)
+                        hh = 1;
                     hh = "" + hh;
-                    var mm = newPlayer.thru.substring(3);
+                    var mm = newPlayer.thru.split(":")[1].substring(0, 2);
                     if (hh.length == 1) {
                         hh = "0" + hh;
                     }
                     newPlayer.thru = hh.concat(":").concat(mm);
                 }
-                */
+                
                 newPlayer.order = scores.standings[i].roundScores[0].score.value + "|"
                     + scores.standings[i].roundScores[1].score.value;
                 // + "|"
@@ -289,7 +292,7 @@
             var fixedScores = scrubOpenData(scores);
             $scope.scores = fixedScores.homeScores;
             $scope.cutLine = '+7';
-            $scope.cutPenalty = '+9';
+            $scope.cutPenalty = '+0';
             $scope.totalScore = 0;
             $scope.avgScore = 0;
 
@@ -297,7 +300,7 @@
             var penalizedPosition = Math.ceil($scope.scores.player.length * .4);
 
             $scope.cutLine = "7";
-            $scope.cutPenalty = "+9"
+            $scope.cutPenalty = "+0"
 
             // Add data to each player for who has picked them
             for (var i = 0; i < $scope.scores.player.length; i++) {
