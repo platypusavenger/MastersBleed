@@ -16,9 +16,9 @@
 
     var config = {
         location: {
-            address: '1233 Hulton Rd, Oakmont, PA 15139',
-            lat: '40.524557',
-            lng: '-79.828234'
+            address: '7169 County Road O, Hartford, WI 53027',
+            lat: '43.2461947',
+            lng: '-88.398613'
         },
         backgrounds: {
             default: 'erin_hills.jpg',
@@ -39,11 +39,11 @@
         $scope.pickReverse = false;
         $scope.playerPredicate = 'scoreKey';
         $scope.playerReverse = false;
-        $scope.cutLine = 'E';
-        $scope.cutPenalty = 'E';
+        $scope.cutLine = '+1';
+        $scope.cutPenalty = '+4';
         $scope.totalScore = 0;
         $scope.avgScore = 0;
-        $scope.showPenalty = false;
+        $scope.showPenalty = true;
 
         $scope.scores = {};
         $scope.scoreCache = {};
@@ -291,16 +291,14 @@
         $scope.scoresCallback = function (scores) {
             var fixedScores = scrubOpenData(scores);
             $scope.scores = fixedScores.homeScores;
-            $scope.cutLine = '+7';
-            $scope.cutPenalty = '+0';
             $scope.totalScore = 0;
             $scope.avgScore = 0;
 
             // Penalty is based on the 40th percentile score
             var penalizedPosition = Math.ceil($scope.scores.player.length * .4);
 
-            $scope.cutLine = "7";
-            $scope.cutPenalty = "+0"
+            $scope.cutLine = "1";
+            $scope.cutPenalty = "+4"
 
             // Add data to each player for who has picked them
             for (var i = 0; i < $scope.scores.player.length; i++) {
