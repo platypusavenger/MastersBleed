@@ -50,6 +50,14 @@ namespace Scoreboard.Controllers
             return View();
         }
 
+
+        public ActionResult BritishOpen_2017()
+        {
+            ViewBag.Messsage = "The Open Championship Scoreboard";
+
+            return View();
+        }
+
         public ActionResult Masters_2017()
         {
             ViewBag.Message = "Master's Scoreboard";

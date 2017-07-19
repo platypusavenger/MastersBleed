@@ -1,0 +1,495 @@
+﻿@{
+    ViewBag.Title = "The Open Championship Scoreboard";
+}
+<style>
+    body {
+        background: center center no-repeat fixed;
+        background-size: cover;
+    }
+
+    .nav_theopen a {
+        background-color: #ddd;
+    }
+</style>
+<script>
+
+    var config = {
+        location: {
+            address: 'Waterloo Rd, Southport PR8 2LX, United Kingdom',
+            lat: '53.6219',
+            lng: '-3.0322'
+        },
+        backgrounds: {
+            default: 'royal_birkdale.jpg',
+            raining: 'royal_birkdale_rain.jpg'
+        }
+    };
+
+    var base_url = '/Scoreboard';
+    if (window.location.hostname == 'localhost')
+        base_url = '';
+
+    angular.module('scoreboardApp', []).controller('ScoreboardCtrl', function ($scope, $http) {
+        $scope.showPlayerRankings = false;
+        $scope.refresh = 30;
+        $scope.personPredicate = 'score';
+        $scope.personReverse = false;
+        $scope.pickPredicate = 'scoreKey';
+        $scope.pickReverse = false;
+        $scope.playerPredicate = 'scoreKey';
+        $scope.playerReverse = false;
+        $scope.cutLine = '+0';
+        $scope.cutPenalty = '+0';
+        $scope.totalScore = 0;
+        $scope.avgScore = 0;
+        $scope.showPenalty = false;
+
+        $scope.scores = {};
+        $scope.scoreCache = {};
+
+        $scope.jeremyL = {
+            'name': 'Jeremy Lizza',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '98489', 'tier': 'A' },
+                { 'id': '6575', 'tier': 'A' },
+                { 'id': '128671', 'tier': 'B' },
+                { 'id': '14762', 'tier': 'B' },
+                { 'id': '134618', 'tier': 'C' },
+                { 'id': '9258', 'tier': 'C' },
+                { 'id': '128677', 'tier': 'C' },
+                { 'id': '7283', 'tier': 'D' },
+                { 'id': '102871', 'tier': 'D' },
+                { 'id': '134630', 'tier': 'D' },
+                { 'id': '73646', 'tier': 'D' },
+                { 'id': '136820', 'tier': 'E' }
+            ]
+        };
+
+        $scope.rob = {
+            'name': 'Rob Eble',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '128690', 'tier': 'A' },
+                { 'id': '136813', 'tier': 'A' },
+                { 'id': '100605', 'tier': 'B' },
+                { 'id': '7166', 'tier': 'B' },
+                { 'id': '', 'tier': 'C' },
+                { 'id': '15622', 'tier': 'C' },
+                { 'id': '131409', 'tier': 'C' },
+                { 'id': '139483', 'tier': 'D' },
+                { 'id': '98486', 'tier': 'D' },
+                { 'id': '103179', 'tier': 'D' },
+                { 'id': '136816', 'tier': 'D' },
+                { 'id': '139472', 'tier': 'E' }
+            ]
+        };
+
+        $scope.basil = {
+            'name': 'Basil Udoudoh',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '100604', 'tier': 'A' },
+                { 'id': '73414', 'tier': 'A' },
+                { 'id': '100605', 'tier': 'B' },
+                { 'id': '7230', 'tier': 'B' },
+                { 'id': '', 'tier': 'C' },
+                { 'id': '134618', 'tier': 'C' },
+                { 'id': '73334', 'tier': 'C' },
+                { 'id': '7283', 'tier': 'D' },
+                { 'id': '103179', 'tier': 'D' },
+                { 'id': '73646', 'tier': 'D' },
+                { 'id': '100579', 'tier': 'D' },
+                { 'id': '136820', 'tier': 'E' }
+            ]
+        };
+
+        $scope.shanks = {
+            'name': 'Scott Hankinson',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '98489', 'tier': 'A' },
+                { 'id': '100604', 'tier': 'A' },
+                { 'id': '47568', 'tier': 'B' },
+                { 'id': '128671', 'tier': 'B' },
+                { 'id': '134618', 'tier': 'C' },
+                { 'id': '127973', 'tier': 'C' },
+                { 'id': '73334', 'tier': 'C' },
+                { 'id': '134630', 'tier': 'D' },
+                { 'id': '102860', 'tier': 'D' },
+                { 'id': '47643', 'tier': 'D' },
+                { 'id': '139484', 'tier': 'D' },
+                { 'id': '139472', 'tier': 'E' }
+            ]
+        };
+
+        $scope.trevor = {
+            'name': 'Trevor Corcoran',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '98489', 'tier': 'A' },
+                { 'id': '128690', 'tier': 'A' },
+                { 'id': '7371', 'tier': 'B' },
+                { 'id': '8576', 'tier': 'B' },
+                { 'id': '7389', 'tier': 'C' },
+                { 'id': '134611', 'tier': 'C' },
+                { 'id': '100585', 'tier': 'C' },
+                { 'id': '72450', 'tier': 'D' },
+                { 'id': '134606', 'tier': 'D' },
+                { 'id': '7127', 'tier': 'D' },
+                { 'id': '139506', 'tier': 'D' },
+                { 'id': '139471', 'tier': 'E' }
+            ]
+        };
+
+        $scope.broc = {
+            'name': "Brian O'Connor",
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '6575', 'tier': 'A' },
+                { 'id': '73414', 'tier': 'A' },
+                { 'id': '47568', 'tier': 'B' },
+                { 'id': '8576', 'tier': 'B' },
+                { 'id': '9190', 'tier': 'C' },
+                { 'id': '100599', 'tier': 'C' },
+                { 'id': '66254', 'tier': 'C' },
+                { 'id': '102871', 'tier': 'D' },
+                { 'id': '131398', 'tier': 'D' },
+                { 'id': '100579', 'tier': 'D' },
+                { 'id': '7238', 'tier': 'D' },
+                { 'id': '136820', 'tier': 'E' }
+            ]
+        };      
+
+        $scope.christian = {
+            'name': 'Christian Nash',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '128690', 'tier': 'A' },
+                { 'id': '100604', 'tier': 'A' },
+                { 'id': '7371', 'tier': 'B' },
+                { 'id': '14762', 'tier': 'B' },
+                { 'id': '9258', 'tier': 'C' },
+                { 'id': '15622', 'tier': 'C' },
+                { 'id': '66254', 'tier': 'C' },
+                { 'id': '139483', 'tier': 'D' },
+                { 'id': '98486', 'tier': 'D' },
+                { 'id': '139474', 'tier': 'D' },
+                { 'id': '100579', 'tier': 'D' },
+                { 'id': '8691', 'tier': 'E' }
+            ]
+        };
+
+        $scope.craig = {
+            'name': 'Craig Marmon',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '6575', 'tier': 'A' },
+                { 'id': '8929', 'tier': 'A' },
+                { 'id': '7166', 'tier': 'B' },
+                { 'id': '131385', 'tier': 'B' },
+                { 'id': '128677', 'tier': 'C' },
+                { 'id': '15622', 'tier': 'C' },
+                { 'id': '131409', 'tier': 'C' },
+                { 'id': '134630', 'tier': 'D' },
+                { 'id': '102860', 'tier': 'D' },
+                { 'id': '73646', 'tier': 'D' },
+                { 'id': '8378', 'tier': 'D' },
+                { 'id': '6533', 'tier': 'E' }
+            ]
+        };
+
+        $scope.mike = {
+            'name': 'Mike Guhl',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '6575', 'tier': 'A' },
+                { 'id': '73414', 'tier': 'A' },
+                { 'id': '14762', 'tier': 'B' },
+                { 'id': '100572', 'tier': 'B' },
+                { 'id': '9258', 'tier': 'C' },
+                { 'id': '73565', 'tier': 'C' },
+                { 'id': '', 'tier': 'C' },
+                { 'id': '102871', 'tier': 'D' },
+                { 'id': '102868', 'tier': 'D' },
+                { 'id': '8378', 'tier': 'D' },
+                { 'id': '', 'tier': 'D' },
+                { 'id': '131392', 'tier': 'E' }
+            ]
+        };
+
+        $scope.brad = {
+            'name': 'Brad Roller',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '98489', 'tier': 'A' },
+                { 'id': '8929', 'tier': 'A' },
+                { 'id': '47568', 'tier': 'B' },
+                { 'id': '7371', 'tier': 'B' },
+                { 'id': '129404', 'tier': 'C' },
+                { 'id': '9258', 'tier': 'C' },
+                { 'id': '97088', 'tier': 'C' },
+                { 'id': '139483', 'tier': 'D' },
+                { 'id': '134630', 'tier': 'D' },
+                { 'id': '102860', 'tier': 'D' },
+                { 'id': '100579', 'tier': 'D' },
+                { 'id': '15489', 'tier': 'E' }
+            ]
+        };
+
+        $scope.shenanigans = [$scope.jeremyL, $scope.rob, $scope.basil, $scope.shanks, $scope.trevor, $scope.broc, $scope.christian, $scope.craig, $scope.mike, $scope.brad];
+
+        $scope.scoresCallback = function (scores) {
+            var fixedScores = scrubOpenData(scores);
+            $scope.scores = fixedScores.homeScores;
+            $scope.cutLine = '+0';
+            $scope.cutPenalty = '+0';
+            $scope.totalScore = 0;
+            $scope.avgScore = 0;
+
+
+            // Add data to each player for who has picked them
+            for (var i = 0; i < $scope.scores.player.length; i++) {
+                // British Open:  Top 70 Advance
+                //var position = $scope.scores.player[i].pos;
+                //if (position.substring(0, 1) == 'T')
+                //    position = parseInt(position.substring(1, position.length));
+
+                //if (position <= 70)
+                //    $scope.cutLine = $scope.scores.player[i].score;
+
+                // British Open:  80th Percentile is position 124
+                //if (position > 123 && $scope.cutPenalty == '')
+                //    $scope.cutPenalty = $scope.scores.player[i].score;
+
+               
+                $scope.scores.player[i].pickedBy = "";
+                $scope.scores.player[i].scoreKey = $scope.getScoreNumber($scope.scores.player[i].score);
+                $scope.scores.player[i].todayKey = $scope.getScoreNumber($scope.scores.player[i].today);
+                if (typeof $scope.scoreCache[$scope.scores.player[i].id] == 'undefined')
+                    $scope.scores.player[i].status = 'scoreHold';
+                else
+                    $scope.scores.player[i].status = $scope.scoreCache[$scope.scores.player[i].id].status;
+            }
+
+            // Add a projected cut penalty
+            // British open replaces rank with CUT -- fix it!
+            $scope.cutLine = '+0';
+            $scope.cutPenalty = '+0';
+            for (var i = 0; i < $scope.scores.player.length; i++) {
+                var position = $scope.scores.player[i].pos;
+                if (position.substring(0, 1) == 'T')
+                    position = parseInt(position.substring(1, position.length));
+
+                //console.log($scope.scores.player[i]);
+                if (!$scope.scores.player[i].isCut) {
+                    $scope.scores.player[i].cutPenalty = '';
+                    //add bonus for winner
+                    //if ($scope.scores.player[i].id == '15622') {
+                    //    $scope.scores.player[i].cutPenalty = (2 * $scope.getScoreNumber($scope.cutPenalty)) * -1
+                    //}
+                    if (position == 1) {
+                        $scope.scores.player[i].cutPenalty = (2 * $scope.getScoreNumber($scope.cutPenalty)) * -1;
+                    }
+                }
+                else
+                    $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
+                $scope.totalScore += $scope.getScoreNumber($scope.scores.player[i].score);
+            }
+            $scope.avgScore = Math.ceil($scope.totalScore / ($scope.scores.player.length - 1));
+
+            for (var i = 0; i < $scope.shenanigans.length; i++) {
+                var currentPerson = $scope.shenanigans[i];
+                currentPerson.score = 0;
+                currentPerson.base = 0;
+                currentPerson.cutPenalty = 0;
+                for (var j = 0; j < currentPerson.picks.length; j++) {
+                    var currentPlayer = currentPerson.picks[j];
+                    var info = $scope.matchPlayerInfo(currentPlayer.id, currentPerson.name);
+                    currentPlayer.name = info.fName + ' ' + info.lName;
+                    currentPlayer.score = info.score;
+                    currentPlayer.today = info.today;
+                    currentPlayer.thru = info.thru;
+                    currentPlayer.status = info.status;
+                    currentPlayer.scoreKey = $scope.getScoreNumber(info.score);
+                    currentPlayer.cutPenalty = info.cutPenalty;
+                    if (info.cutPenalty != '') {
+                        if ($scope.showPenalty) {
+                            currentPerson.scoreKey += $scope.getScoreNumber(info.score);
+                            currentPerson.score += $scope.getScoreNumber(info.cutPenalty);
+                        }
+                        currentPerson.cutPenalty += $scope.getScoreNumber(info.cutPenalty);
+                    }
+                    var todayString = 'E';
+                    if (currentPlayer.today == 'E' || currentPlayer.today.substring(0, 1) == '+' || currentPlayer.today.substring(0, 1) == '-') {
+                        todayString = currentPlayer.today;
+                    }
+                    if (currentPlayer.score == 'E' || currentPlayer.score.substring(0, 1) == '+' || currentPlayer.score.substring(0, 1) == '-') {
+                        currentPlayer.todayKey = $scope.getScoreNumber(todayString);
+                        currentPerson.score += $scope.getScoreNumber(info.score);
+                        currentPerson.base += (currentPlayer.scoreKey - currentPlayer.todayKey);
+                    }
+
+                    if (typeof $scope.scoreCache[info.id] == 'undefined') {
+                        $scope.scoreCache[info.id] = { 'thru': info.thru, 'score': info.scoreKey, 'status': 'scoreHold' };
+                    } else {
+                        var cache = $scope.scoreCache[info.id];
+                        if (info.thru != cache.thru) {
+                            if (info.scoreKey > cache.score) {
+                                cache.status = 'scoreIncrease';
+                            } else if (info.scoreKey < cache.score) {
+                                cache.status = 'scoreDecrease';
+                            } else {
+                                cache.status = 'scoreHold';
+                            }
+                            cache.thru = info.thru;
+                            cache.score = info.scoreKey;
+                        }
+                    }
+                }
+            }
+
+        };
+
+        // British Open uses a different data provider -- scrub it to one we know how to work with
+        function scrubOpenData(scores) {
+            var result = {};
+            result.homeScores = {};
+            // Not actually using the global round anywhere
+            result.homeScores.round = "TBD";
+            result.homeScores.player = [];
+            var lastPos = scores[0].Position.SortValue;
+            for (var i = 0; i < scores.length; i++) {
+                var newPlayer = {};
+                newPlayer.isCut = false;
+                newPlayer.pos = scores[i].Position.DisplayValue;
+                if (newPlayer.pos == 'CUT' || newPlayer.pos == 'WD') {
+                    newPlayer.pos = "" + scores[i].Position.SortValue;
+                    newPlayer.isCut = true;
+                }
+
+                newPlayer.dName = scores[i].Name;
+                newPlayer.fName = scores[i].Name.split(",")[1];
+                newPlayer.lName = scores[i].Name.split(",")[0];
+                newPlayer.id = scores[i].ID;
+                newPlayer.score = scores[i].ToPar;
+                newPlayer.today = scores[i].Today;
+                newPlayer.thru = scores[i].Hole;
+                //time zones!
+                if (newPlayer.thru.indexOf(":") != -1) {
+                    var hh = newPlayer.thru.substring(0, 2) - 5;
+                    hh = "" + hh;
+                    var mm = newPlayer.thru.substring(3);
+                    if (hh.length == 1) {
+                       hh = "0" + hh;
+                    }
+                    newPlayer.thru = hh.concat(":").concat(mm);
+                }
+                newPlayer.order = scores[i].R1 + "|" + scores[i].R2 + "|" + scores[i].R3 + "|" + scores[i].R4;
+                newPlayer.live = "f";
+
+                if (newPlayer.score == "PAR")
+                    newPlayer.score = "E";
+                if (newPlayer.total == "PAR")
+                    newPlayer.total = "E";
+                if (newPlayer.today == "PAR")
+                    newPlayer.today = "E";
+
+                result.homeScores.player.push(newPlayer);
+            }
+            return result;
+        };
+
+        $scope.getDelta = function (person) {
+            var delta = person.score - person.base;
+            if ($scope.showPenalty)
+                delta = delta - person.cutPenalty;
+            var value = "";
+            if (delta > 0)
+                value = "+" + delta;
+            else if (delta == 0)
+                value = "E";
+            else
+                value = delta;
+
+            return value;
+        };
+
+        $scope.setExpanded = function (value) {
+            for (var i = 0; i < $scope.shenanigans.length; i++)
+                $scope.shenanigans[i].expanded = value;
+        };
+
+        $scope.getScoreNumber = function (scoreString) {
+            if (scoreString == 'E' || scoreString == '')
+                return 0;
+            else
+                return parseInt(scoreString);
+        };
+
+        $scope.matchPlayerInfo = function (id, pickedBy) {
+            for (var i = 0; i < $scope.scores.player.length; i++) {
+                if (id == $scope.scores.player[i].id) {
+                    if ($scope.scores.player[i].pickedBy.indexOf(pickedBy) == -1) {
+                        if ($scope.scores.player[i].pickedBy.length > 0)
+                            $scope.scores.player[i].pickedBy += ", ";
+                        $scope.scores.player[i].pickedBy += pickedBy;
+                    }
+
+                    var result = $scope.scores.player[i];
+                    if (result.score == '')
+                        result.scoreKey = 0;
+                    if (result.thru == '')
+                        result.thruKey = 0;
+
+                    return result;
+                }
+            }
+
+            return { name: '', score: '', thru: '', today: '', status: 'scoreHold' };
+        };
+
+        $scope.loadData = function () {
+            $http.get(base_url + '/api/scoreboard/britishopen/2017').success($scope.scoresCallback);
+        };
+
+        $scope.refreshingIn = function () {
+            if ($scope.refresh == 0) {
+                $scope.refresh = 30;
+                $scope.loadData();
+            } else
+                $scope.refresh = $scope.refresh - 1;
+
+            $scope.$apply($scope.refresh);
+        };
+
+        $scope.setPlayerSort = function (sort) {
+            if (sort == 'default') {
+                $scope.playerReverse = false;
+                $scope.playerPredicate = 'scoreKey';
+            } else if (sort == $scope.playerPredicate) {
+                $scope.playerReverse = !$scope.playerReverse;
+            } else {
+                $scope.playerReverse = false;
+                $scope.playerPredicate = sort;
+            }
+        };
+
+        $scope.loadData();
+
+        setInterval($scope.refreshingIn, 1000);
+    });
+
+
+</script>
+
