@@ -76,7 +76,7 @@
                 { 'id': '136813', 'tier': 'A' },
                 { 'id': '100605', 'tier': 'B' },
                 { 'id': '7166', 'tier': 'B' },
-                { 'id': '', 'tier': 'C' },
+                { 'id': '134616', 'tier': 'C' },
                 { 'id': '15622', 'tier': 'C' },
                 { 'id': '131409', 'tier': 'C' },
                 { 'id': '139483', 'tier': 'D' },
@@ -96,7 +96,7 @@
                 { 'id': '73414', 'tier': 'A' },
                 { 'id': '100605', 'tier': 'B' },
                 { 'id': '7230', 'tier': 'B' },
-                { 'id': '', 'tier': 'C' },
+                { 'id': '7389', 'tier': 'C' },
                 { 'id': '134618', 'tier': 'C' },
                 { 'id': '73334', 'tier': 'C' },
                 { 'id': '7283', 'tier': 'D' },
@@ -213,16 +213,16 @@
             'expanded': true,
             'picks': [
                 { 'id': '6575', 'tier': 'A' },
-                { 'id': '73414', 'tier': 'A' },
+                { 'id': '124325', 'tier': 'A' },
                 { 'id': '14762', 'tier': 'B' },
                 { 'id': '100572', 'tier': 'B' },
                 { 'id': '9258', 'tier': 'C' },
                 { 'id': '73565', 'tier': 'C' },
-                { 'id': '', 'tier': 'C' },
+                { 'id': '7411', 'tier': 'C' },
                 { 'id': '102871', 'tier': 'D' },
                 { 'id': '102868', 'tier': 'D' },
+                { 'id': '136816', 'tier': 'D' },
                 { 'id': '8378', 'tier': 'D' },
-                { 'id': '', 'tier': 'D' },
                 { 'id': '131392', 'tier': 'E' }
             ]
         };
@@ -247,7 +247,47 @@
             ]
         };
 
-        $scope.shenanigans = [$scope.jeremyL, $scope.rob, $scope.basil, $scope.shanks, $scope.trevor, $scope.broc, $scope.christian, $scope.craig, $scope.mike, $scope.brad];
+        $scope.donnie = {
+            'name': 'Donnie Mattingly',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '128690', 'tier': 'A' },
+                { 'id': '136813', 'tier': 'A' },
+                { 'id': '97093', 'tier': 'B' },
+                { 'id': '98494', 'tier': 'B' },
+                { 'id': '129404', 'tier': 'C' },
+                { 'id': '7175', 'tier': 'C' },
+                { 'id': '100576', 'tier': 'C' },
+                { 'id': '105988', 'tier': 'D' },
+                { 'id': '72450', 'tier': 'D' },
+                { 'id': '136830', 'tier': 'D' },
+                { 'id': '139491', 'tier': 'D' },
+                { 'id': '65442', 'tier': 'E' }
+            ]
+        };
+
+        $scope.carl = {
+            'name': 'Carl Newton',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '100604', 'tier': 'A' },
+                { 'id': '124325', 'tier': 'A' },
+                { 'id': '7166', 'tier': 'B' },
+                { 'id': '97093', 'tier': 'B' },
+                { 'id': '9258', 'tier': 'C' },
+                { 'id': '73334', 'tier': 'C' },
+                { 'id': '66254', 'tier': 'C' },
+                { 'id': '134630', 'tier': 'D' },
+                { 'id': '134606', 'tier': 'D' },
+                { 'id': '139475', 'tier': 'D' },
+                { 'id': '8920', 'tier': 'D' },
+                { 'id': '139471', 'tier': 'E' }
+            ]
+        };
+
+        $scope.shenanigans = [$scope.jeremyL, $scope.rob, $scope.basil, $scope.shanks, $scope.trevor, $scope.broc, $scope.christian, $scope.craig, $scope.mike, $scope.brad, $scope.donnie, $scope.carl];
 
         $scope.scoresCallback = function (scores) {
             var fixedScores = scrubOpenData(scores);
