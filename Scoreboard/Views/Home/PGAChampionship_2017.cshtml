@@ -1,0 +1,502 @@
+﻿
+@{
+    ViewBag.Title = "PGA Championship Scoreboard";
+}
+@Styles.Render("~/Content/css")
+<style>
+    body {
+        background: url(../images/pga.jpg) center center no-repeat fixed;
+        background-size: cover;
+    }
+
+    .nav_pga a {
+        background-color: #ddd;
+    }
+</style>
+<script>
+
+    var config = {
+        location: {
+            address: '3700 Gleneagles Road, Charlotte, NC 28210',
+            lat: '34.580664',
+            lng: '-82.6498563'
+        },
+        backgrounds: {
+            default: 'quail_hollow.jpg',
+            raining: 'quail_hollow.jpg'
+        }
+    };
+
+    var base_url = '/Scoreboard';
+    if (window.location.hostname == 'localhost')
+        base_url = '';
+
+    angular.module('scoreboardApp', []).controller('ScoreboardCtrl', function ($scope, $http) {
+        $scope.showPlayerRankings = false;
+        $scope.refresh = 30;
+        $scope.personPredicate = 'score';
+        $scope.personReverse = false;
+        $scope.pickPredicate = 'scoreKey';
+        $scope.pickReverse = false;
+        $scope.playerPredicate = 'scoreKey';
+        $scope.playerReverse = false;
+        $scope.cutLine = 'E';
+        $scope.cutPenalty = '';
+        $scope.totalScore = 0;
+        $scope.avgScore = 0;
+        $scope.showPenalty = false;
+
+        $scope.scores = {};
+        $scope.scoreCache = {};
+
+        $scope.jeremyL = {
+            'name': 'Jeremy Lizza',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '34046', 'tier': 'A' },
+                { 'id': '32102', 'tier': 'B' },
+                { 'id': '12716', 'tier': 'B' },
+                { 'id': '24138', 'tier': 'C' },
+                { 'id': '25632', 'tier': 'C' },
+                { 'id': '33399', 'tier': 'C' },
+                { 'id': '29518', 'tier': 'D' },
+                { 'id': '34409', 'tier': 'D' },
+                { 'id': '25396', 'tier': 'D' },
+                { 'id': '40098', 'tier': 'D' },
+                { 'id': '01706', 'tier': 'E' }
+            ]
+        };
+
+        $scope.craigM = {
+            'name': 'Craig Marmon',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '24610', 'tier': 'A' },
+                { 'id': '24610', 'tier': 'B' },
+                { 'id': '24610', 'tier': 'B' },
+                { 'id': '24610', 'tier': 'C' },
+                { 'id': '24610', 'tier': 'C' },
+                { 'id': '24610', 'tier': 'C' },
+                { 'id': '24610', 'tier': 'D' },
+                { 'id': '24610', 'tier': 'D' },
+                { 'id': '24610', 'tier': 'D' },
+                { 'id': '24610', 'tier': 'D' },
+                { 'id': '24610', 'tier': 'E' }
+            ]
+        };
+
+        $scope.robE = {
+            'name': 'Rob Eble',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '30925', 'tier': 'A' },
+                { 'id': '28089', 'tier': 'B' },
+                { 'id': '22405', 'tier': 'B' },
+                { 'id': '32366', 'tier': 'C' },
+                { 'id': '31323', 'tier': 'C' },
+                { 'id': '27141', 'tier': 'C' },
+                { 'id': '29926', 'tier': 'D' },
+                { 'id': '23063', 'tier': 'D' },
+                { 'id': '34264', 'tier': 'D' },
+                { 'id': '23063', 'tier': 'D' },
+                { 'id': '39954', 'tier': 'E' }
+            ]
+        };
+
+        $scope.scottH = {
+            'name': 'Scott Hankinson',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '28237', 'tier': 'A' },
+                { 'id': '32102', 'tier': 'B' },
+                { 'id': '46970', 'tier': 'B' },
+                { 'id': '34360', 'tier': 'C' },
+                { 'id': '26331', 'tier': 'C' },
+                { 'id': '26499', 'tier': 'C' },
+                { 'id': '29420', 'tier': 'D' },
+                { 'id': '31646', 'tier': 'D' },
+                { 'id': '35296', 'tier': 'D' },
+                { 'id': '27896', 'tier': 'D' },
+                { 'id': '39958', 'tier': 'E' }
+            ]
+        };
+
+        $scope.brianO = {
+            'name': "Brian O'Connor",
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '34046', 'tier': 'A' },
+                { 'id': '28089', 'tier': 'B' },
+                { 'id': '29974', 'tier': 'B' },
+                { 'id': '29478', 'tier': 'C' },
+                { 'id': '25632', 'tier': 'C' },
+                { 'id': '29221', 'tier': 'C' },
+                { 'id': '31646', 'tier': 'D' },
+                { 'id': '34363', 'tier': 'D' },
+                { 'id': '34431', 'tier': 'D' },
+                { 'id': '31202', 'tier': 'D' },
+                { 'id': '24663', 'tier': 'E' }
+            ]
+        };
+
+        $scope.donnieM = {
+            'name': "Donnie Mattingly",
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '34046', 'tier': 'A' },
+                { 'id': '46970', 'tier': 'B' },
+                { 'id': '36689', 'tier': 'B' },
+                { 'id': '24138', 'tier': 'C' },
+                { 'id': '29725', 'tier': 'C' },
+                { 'id': '25686', 'tier': 'C' },
+                { 'id': '10809', 'tier': 'D' },
+                { 'id': '46464', 'tier': 'D' },
+                { 'id': '34242', 'tier': 'D' },
+                { 'id': '35314', 'tier': 'D' },
+                { 'id': '25240', 'tier': 'E' }
+            ]
+        };
+
+        $scope.bradR = {
+            'name': 'Brad Roller',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '34046', 'tier': 'A' },
+                { 'id': '32102', 'tier': 'B' },
+                { 'id': '36689', 'tier': 'B' },
+                { 'id': '32366', 'tier': 'C' },
+                { 'id': '34360', 'tier': 'C' },
+                { 'id': '26331', 'tier': 'C' },
+                { 'id': '29420', 'tier': 'D' },
+                { 'id': '29518', 'tier': 'D' },
+                { 'id': '25396', 'tier': 'D' },
+                { 'id': '25900', 'tier': 'D' },
+                { 'id': '01706', 'tier': 'E' }
+            ]
+        };
+
+        $scope.trevorC = {
+            'name': 'Trevor Corcoran',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '30925', 'tier': 'A' },
+                { 'id': '36689', 'tier': 'B' },
+                { 'id': '24502', 'tier': 'B' },
+                { 'id': '26331', 'tier': 'C' },
+                { 'id': '31323', 'tier': 'C' },
+                { 'id': '25686', 'tier': 'C' },
+                { 'id': '29926', 'tier': 'D' },
+                { 'id': '10809', 'tier': 'D' },
+                { 'id': '23063', 'tier': 'D' },
+                { 'id': '25834', 'tier': 'D' },
+                { 'id': '29479', 'tier': 'E' }
+            ]
+        };
+
+        
+        $scope.carlN = {
+            'name': 'Carl Newton',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '28237', 'tier': 'A' },
+                { 'id': '25364', 'tier': 'B' },
+                { 'id': '12716', 'tier': 'B' },
+                { 'id': '26331', 'tier': 'C' },
+                { 'id': '26499', 'tier': 'C' },
+                { 'id': '27064', 'tier': 'C' },
+                { 'id': '35296', 'tier': 'D' },
+                { 'id': '27896', 'tier': 'D' },
+                { 'id': '34363', 'tier': 'D' },
+                { 'id': '23063', 'tier': 'D' },
+                { 'id': '25240', 'tier': 'E' }
+            ]
+        };
+
+        $scope.christianN = {
+            'name': 'Christian Nash',
+            'score': 0,
+            'expanded': true,
+            'picks': [
+                { 'id': '32839', 'tier': 'A' },
+                { 'id': '32102', 'tier': 'B' },
+                { 'id': '28089', 'tier': 'B' },
+                { 'id': '29725', 'tier': 'C' },
+                { 'id': '27141', 'tier': 'C' },
+                { 'id': '32448', 'tier': 'C' },
+                { 'id': '31646', 'tier': 'D' },
+                { 'id': '25396', 'tier': 'D' },
+                { 'id': '25834', 'tier': 'D' },
+                { 'id': '34431', 'tier': 'D' },
+                { 'id': '25240', 'tier': 'E' }
+            ]
+        };
+
+        $scope.shenanigans = [$scope.jeremyL, $scope.craigM, $scope.robE, $scope.scottH, $scope.brianO, $scope.donnieM, $scope.bradR, $scope.trevorC, $scope.carlN, $scope.christianN];
+
+
+        $scope.scoresCallback = function (scores) {
+            var fixedScores = scrubChampionshipData(scores);
+            $scope.scores = fixedScores.homeScores;
+            $scope.cutLine = '';
+            $scope.totalScore = 0;
+            $scope.avgScore = 0;
+
+            //$scope.cutLine = '+2';
+            //$scope.cutPenalty = "+4";
+            // Add data to each player for who has picked them
+            for (var i = 0; i < $scope.scores.player.length; i++) {
+                // PGA Championship:  Top 70 Advance
+                var position = $scope.scores.player[i].pos;
+                if (position.substring(0, 1) == 'T')
+                    position = parseInt(position.substring(1, position.length));
+                //console.log($scope.scores.player[i]);
+                if (!$scope.scores.player[i].isCut) {
+                    $scope.scores.player[i].cutPenalty = '';
+                    //add bonus for winner
+                    if (position == 1) {
+                        $scope.scores.player[i].cutPenalty = (2 * $scope.getScoreNumber($scope.cutPenalty)) * -1
+                        //found someone in first
+                        console.log("Found it! " + JSON.stringify($scope.scores.player[i]));
+                    }
+                }
+                else
+                    $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
+
+                //if (position <= 70)
+                //    $scope.cutLine = $scope.scores.player[i].score;
+
+                // PGA Championship:  80th Percentile is position 125
+                //if (position > 124 && $scope.cutPenalty == '')
+                //    $scope.cutPenalty = $scope.scores.player[i].score;
+
+                $scope.scores.player[i].pickedBy = "";
+                $scope.scores.player[i].scoreKey = $scope.getScoreNumber($scope.scores.player[i].score);
+                $scope.scores.player[i].todayKey = $scope.getScoreNumber($scope.scores.player[i].today);
+                if (typeof $scope.scoreCache[$scope.scores.player[i].id] == 'undefined')
+                    $scope.scores.player[i].status = 'scoreHold';
+                else
+                    $scope.scores.player[i].status = $scope.scoreCache[$scope.scores.player[i].id].status;
+            }
+
+            // Add a projected cut penalty
+            for (var i = 0; i < $scope.scores.player.length; i++) {
+                var position = $scope.scores.player[i].pos;
+                if (position.substring(0, 1) == 'T')
+                    position = parseInt(position.substring(1, position.length));
+            
+                //if (position <= 70)
+                //    $scope.scores.player[i].cutPenalty = '';
+                //else
+                //    $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
+                if (position == 'CUT' || position == 'WD')
+                    $scope.scores.player[i].cutPenalty = 2 * $scope.getScoreNumber($scope.cutPenalty);
+                else {
+                    $scope.scores.player[i].cutPenalty = '';
+                    //add bonus for winner
+                    if (position == 1) {
+                        $scope.scores.player[i].cutPenalty = (2 * $scope.getScoreNumber($scope.cutPenalty)) * -1
+                        //found someone in first
+                        console.log("Found it! " + JSON.stringify($scope.scores.player[i]));
+                    }
+                }
+
+                $scope.totalScore += $scope.getScoreNumber($scope.scores.player[i].score);
+            }
+            $scope.avgScore = Math.ceil($scope.totalScore / ($scope.scores.player.length));
+
+            for (var i = 0; i < $scope.shenanigans.length; i++) {
+                var currentPerson = $scope.shenanigans[i];
+                currentPerson.score = 0;
+                currentPerson.base = 0;
+                currentPerson.cutPenalty = 0;
+                currentPerson.cutPlayers = 0;
+                for (var j = 0; j < currentPerson.picks.length; j++) {
+                    var currentPlayer = currentPerson.picks[j];
+                    var info = $scope.matchPlayerInfo(currentPlayer.id, currentPerson.name);
+                    currentPlayer.name = info.fName + ' ' + info.lName;
+                    currentPlayer.score = info.score;
+                    currentPlayer.today = info.today;
+                    currentPlayer.thru = info.thru;
+                    currentPlayer.status = info.status;
+                    currentPlayer.scoreKey = $scope.getScoreNumber(info.score);
+                    currentPlayer.cutPenalty = info.cutPenalty;
+                    if (info.cutPenalty != '') {
+                        currentPerson.cutPenalty += $scope.getScoreNumber(info.cutPenalty);
+                        currentPerson.cutPlayers += 1;
+                    }
+                    var todayString = 'E';
+                    if (currentPlayer.today == 'E' || currentPlayer.today.substring(0, 1) == '+' || currentPlayer.today.substring(0, 1) == '-') {
+                        todayString = currentPlayer.today;
+                    }
+                    if (currentPlayer.score == 'E' || currentPlayer.score.substring(0, 1) == '+' || currentPlayer.score.substring(0, 1) == '-') {
+                        currentPlayer.todayKey = $scope.getScoreNumber(todayString);
+                        currentPerson.score += $scope.getScoreNumber(info.score);
+                        currentPerson.base += (currentPlayer.scoreKey - currentPlayer.todayKey);
+                    }
+
+                    if (typeof $scope.scoreCache[info.id] == 'undefined') {
+                        $scope.scoreCache[info.id] = { 'thru': info.thru, 'score': info.scoreKey, 'status': 'scoreHold' };
+                    } else {
+                        var cache = $scope.scoreCache[info.id];
+                        if (info.thru != cache.thru) {
+                            if (info.scoreKey > cache.score) {
+                                cache.status = 'scoreIncrease';
+                            } else if (info.scoreKey < cache.score) {
+                                cache.status = 'scoreDecrease';
+                            } else {
+                                cache.status = 'scoreHold';
+                            }
+                            cache.thru = info.thru;
+                            cache.score = info.scoreKey;
+                        }
+                    }
+                }
+                if ($scope.showPenalty) {
+                    currentPerson.score += currentPerson.cutPenalty;
+                }
+            }
+
+        };
+
+        // PGA Championship uses a different data provider -- scrub it to one we know how to work with
+        function scrubChampionshipData(scores) {
+            var result = {};
+            result.homeScores = {};
+            // Not actually using the global round anywhere
+            result.homeScores.round = "TBD";
+            result.homeScores.player = [];
+
+            var lastPos = scores.player[0].currentPosition;
+            for (var i = 0; i < scores.player.length; i++) {
+                var newPlayer = {};
+                newPlayer.pos = scores.player[i].currentPosition;
+                newPlayer.dName = scores.player[i].firstName + " " + scores.player[i].lastName;
+                newPlayer.fName = scores.player[i].firstName;
+                newPlayer.lName = scores.player[i].lastName;
+                newPlayer.id = scores.player[i].id;
+                newPlayer.score = scores.player[i].totalParRelative;
+                newPlayer.today = scores.player[i].currentParRelative;
+                newPlayer.thru = scores.player[i].thru;
+
+                //time zone adjust
+                //if (newPlayer.thru.indexOf(":") != -1) {
+                //    var time = newPlayer.thru.split(':');
+                //    var hh = time[0] % 12 + 1;
+                //    newPlayer.thru = hh + ":" + time[1];
+                //}
+
+                newPlayer.order = scores.player[i].round[0].strokes + "|" + scores.player[i].round[1].strokes + "|" + scores.player[i].round[2].strokes + "|" + scores.player[i].round[3].strokes;
+                newPlayer.live = "f";
+
+                if (newPlayer.score == "-")
+                    newPlayer.score = "E";
+                if (newPlayer.total == "-")
+                    newPlayer.total = "E";
+                if (newPlayer.today == "-")
+                    newPlayer.today = "E";
+                if (newPlayer.thru == "-")
+                    newPlayer.thru == "CUT";
+
+                if (newPlayer.pos == 'CUT') {
+                    newPlayer.score = $scope.getScoreNumber(scores.player[i].round[0].parRelative) + $scope.getScoreNumber(scores.player[i].round[1].parRelative);
+                    newPlayer.score = "+" + newPlayer.score;
+                }
+
+
+                result.homeScores.player.push(newPlayer);
+            }
+            return result;
+        };
+
+        $scope.getDelta = function (person) {
+            var delta = person.score - person.base;
+            if ($scope.showPenalty)
+                delta = delta - person.cutPenalty;
+            var value = "";
+            if (delta > 0)
+                value = "+" + delta;
+            else if (delta == 0)
+                value = "E";
+            else
+                value = delta;
+
+            return value;
+        };
+
+        $scope.setExpanded = function (value) {
+            for (var i = 0; i < $scope.shenanigans.length; i++)
+                $scope.shenanigans[i].expanded = value;
+        };
+
+        $scope.getScoreNumber = function (scoreString) {
+            if (scoreString == 'E' || scoreString == '')
+                return 0;
+            else
+                return parseInt(scoreString);
+        };
+
+        $scope.matchPlayerInfo = function (id, pickedBy) {
+            for (var i = 0; i < $scope.scores.player.length; i++) {
+                if (id == $scope.scores.player[i].id) {
+                    if ($scope.scores.player[i].pickedBy.indexOf(pickedBy) == -1) {
+                        if ($scope.scores.player[i].pickedBy.length > 0)
+                            $scope.scores.player[i].pickedBy += ", ";
+                        $scope.scores.player[i].pickedBy += pickedBy;
+                    }
+
+                    var result = $scope.scores.player[i];
+                    if (result.score == '')
+                        result.scoreKey = 0;
+                    if (result.thru == '')
+                        result.thruKey = 0;
+
+                    return result;
+                }
+            }
+
+            return { name: '', score: '', thru: '', today: '', status: 'scoreHold' };
+        };
+
+        $scope.loadData = function () {
+            $http.get(base_url + '/api/scoreboard/pgachampionship/2017').success($scope.scoresCallback);
+        };
+
+        $scope.refreshingIn = function () {
+            if ($scope.refresh == 0) {
+                $scope.refresh = 30;
+                $scope.loadData();
+            } else
+                $scope.refresh = $scope.refresh - 1;
+
+            $scope.$apply($scope.refresh);
+        };
+
+        $scope.setPlayerSort = function (sort) {
+            if (sort == 'default') {
+                $scope.playerReverse = false;
+                $scope.playerPredicate = 'scoreKey';
+            } else if (sort == $scope.playerPredicate) {
+                $scope.playerReverse = !$scope.playerReverse;
+            } else {
+                $scope.playerReverse = false;
+                $scope.playerPredicate = sort;
+            }
+        };
+
+        $scope.loadData();
+
+        setInterval($scope.refreshingIn, 1000);
+    });
+
+
+</script>
+

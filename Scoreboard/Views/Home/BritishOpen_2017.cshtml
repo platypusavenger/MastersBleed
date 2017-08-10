@@ -38,11 +38,11 @@
         $scope.pickReverse = false;
         $scope.playerPredicate = 'scoreKey';
         $scope.playerReverse = false;
-        $scope.cutLine = '+0';
-        $scope.cutPenalty = '+0';
+        $scope.cutLine = '+6';
+        $scope.cutPenalty = '+7';
         $scope.totalScore = 0;
         $scope.avgScore = 0;
-        $scope.showPenalty = false;
+        $scope.showPenalty = true;
 
         $scope.scores = {};
         $scope.scoreCache = {};
@@ -324,8 +324,8 @@
 
             // Add a projected cut penalty
             // British open replaces rank with CUT -- fix it!
-            $scope.cutLine = '+0';
-            $scope.cutPenalty = '+0';
+            $scope.cutLine = '+6';
+            $scope.cutPenalty = '+7';
             for (var i = 0; i < $scope.scores.player.length; i++) {
                 var position = $scope.scores.player[i].pos;
                 if (position.substring(0, 1) == 'T')

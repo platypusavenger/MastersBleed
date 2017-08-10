@@ -239,6 +239,7 @@
     <Content Include="images\pga_logo.png" />
     <Content Include="images\pga_raining.jpg" />
     <Content Include="images\pga_raining.png" />
+    <Content Include="images\quail_hollow.jpg" />
     <Content Include="images\royal_birkdale.jpg" />
     <Content Include="images\royal_birkdale_rain.jpg" />
     <Content Include="images\royal_troon.jpg" />
@@ -350,6 +351,7 @@
     <Content Include="App_Data\Masters2016.json" />
     <Content Include="App_Data\Masters2017.json" />
     <Content Include="App_Data\USOpen2017.json" />
+    <Content Include="App_Data\BritishOpen2017.json" />
     <None Include="Properties\PublishProfiles\BenchServer.pubxml">
       <SubType>Designer</SubType>
     </None>
@@ -635,6 +637,7 @@
     <Content Include="Views\Home\Masters_2017.cshtml" />
     <Content Include="Views\Home\USO_2017.cshtml" />
     <Content Include="Views\Home\BritishOpen_2017.cshtml" />
+    <Content Include="Views\Home\PGAChampionship_2017.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
