@@ -347,6 +347,14 @@
                     currentPlayer.status = info.status;
                     currentPlayer.scoreKey = $scope.getScoreNumber(info.score);
                     currentPlayer.cutPenalty = info.cutPenalty;
+                    if (currentPlayer.id === '34242') {
+                        currentPlayer.thru = "WD";
+                        currentPlayer.today = "-";
+                        currentPlayer.cutPenalty = 0;
+                        currentPlayer.score = "+7";
+                        currentPlayer.scoreKey = 7;
+                    }
+
                     if (info.cutPenalty != '') {
                         currentPerson.cutPenalty += $scope.getScoreNumber(info.cutPenalty);
                         currentPerson.cutPlayers += 1;
@@ -357,7 +365,7 @@
                     }
                     if (currentPlayer.score == 'E' || currentPlayer.score.substring(0, 1) == '+' || currentPlayer.score.substring(0, 1) == '-') {
                         currentPlayer.todayKey = $scope.getScoreNumber(todayString);
-                        currentPerson.score += $scope.getScoreNumber(info.score);
+                        currentPerson.score += $scope.getScoreNumber(currentPlayer.score);
                         currentPerson.base += (currentPlayer.scoreKey - currentPlayer.todayKey);
                     }
 
