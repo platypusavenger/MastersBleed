@@ -638,6 +638,7 @@
     <Content Include="Views\Home\USO_2017.cshtml" />
     <Content Include="Views\Home\BritishOpen_2017.cshtml" />
     <Content Include="Views\Home\PGAChampionship_2017.cshtml" />
+    <Content Include="Views\Home\Masters_2018.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
